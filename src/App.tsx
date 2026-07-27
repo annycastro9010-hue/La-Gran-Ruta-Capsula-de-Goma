@@ -1784,17 +1784,148 @@ export default function App() {
                   />
                 )}
 
-                {/* Tactical controls container: Uses ControlsOverlay for clear key bindings and attack descriptions */}
+                {/* Tactical controls container placed at the bottom space: Retro Arcade Arcade Controls with Keyboard Badges */}
                 {!isLargeScreen && showVirtualControls && (
-                  <div className="w-full mt-2 max-w-[500px] mx-auto select-none pointer-events-auto">
-                    <ControlsOverlay 
-                      onMove={movePlayer} 
-                      onAttack={executeAttack} 
-                      onRoll={makeRoll} 
-                      onEatMeat={eatMeat} 
-                      meatCount={player.meatCount}
-                      haki={player.haki}
-                    />
+                  <div className="w-full flex flex-row items-center justify-around gap-2 sm:gap-4 mt-3 px-3 py-3 bg-slate-900/95 border-2 border-slate-800 rounded-2xl max-w-[520px] mx-auto select-none pointer-events-auto shadow-2xl shadow-black/90 relative">
+                    
+                    {/* Left side: Tactile high-contrast retro D-Pad with WASD hints */}
+                    <div className="bg-slate-950 border border-slate-700/80 p-1 rounded-full select-none flex items-center justify-center pointer-events-auto scale-95 sm:scale-100 shadow-xl">
+                      <div className="relative w-32 h-32 flex items-center justify-center">
+                        {/* Center core cross */}
+                        <div className="absolute w-10 h-32 bg-slate-800 rounded-lg border border-slate-700 shadow-inner" />
+                        <div className="absolute h-10 w-32 bg-slate-800 rounded-lg border border-slate-700 shadow-inner" />
+                        <div className="absolute w-9 h-9 bg-slate-950 rounded-full z-10 border border-slate-700/80 shadow-md flex items-center justify-center text-slate-300 text-[10px] font-bold">⚓</div>
+
+                        {/* UP ARROW BUTTON (W) */}
+                        <button
+                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); movePlayer('up'); }}
+                          onClick={() => movePlayer('up')}
+                          className="absolute top-0 w-10 h-10 flex flex-col items-center justify-center rounded-t-xl bg-slate-700 hover:bg-amber-600 active:bg-amber-500 border-b border-slate-600 active:text-white active:scale-95 z-20 transition-all cursor-pointer shadow-md"
+                          title="Arriba (W / ↑)"
+                        >
+                          <ArrowUp className="w-3.5 h-3.5 text-amber-400" />
+                          <span className="text-[7px] font-mono font-black text-slate-300 leading-none">W</span>
+                        </button>
+
+                        {/* DOWN ARROW BUTTON (S) */}
+                        <button
+                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); movePlayer('down'); }}
+                          onClick={() => movePlayer('down')}
+                          className="absolute bottom-0 w-10 h-10 flex flex-col items-center justify-center rounded-b-xl bg-slate-700 hover:bg-amber-600 active:bg-amber-500 border-t border-slate-600 active:text-white active:scale-95 z-20 transition-all cursor-pointer shadow-md"
+                          title="Abajo (S / ↓)"
+                        >
+                          <span className="text-[7px] font-mono font-black text-slate-300 leading-none">S</span>
+                          <ArrowDown className="w-3.5 h-3.5 text-amber-400" />
+                        </button>
+
+                        {/* LEFT ARROW BUTTON (A) */}
+                        <button
+                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); movePlayer('left'); }}
+                          onClick={() => movePlayer('left')}
+                          className="absolute left-0 w-10 h-10 flex flex-row items-center justify-center gap-0.5 rounded-l-xl bg-slate-700 hover:bg-amber-600 active:bg-amber-500 border-r border-slate-600 active:text-white active:scale-95 z-20 transition-all cursor-pointer shadow-md"
+                          title="Izquierda (A / ←)"
+                        >
+                          <ArrowLeft className="w-3.5 h-3.5 text-amber-400" />
+                          <span className="text-[7px] font-mono font-black text-slate-300 leading-none">A</span>
+                        </button>
+
+                        {/* RIGHT ARROW BUTTON (D) */}
+                        <button
+                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); movePlayer('right'); }}
+                          onClick={() => movePlayer('right')}
+                          className="absolute right-0 w-10 h-10 flex flex-row items-center justify-center gap-0.5 rounded-r-xl bg-slate-700 hover:bg-amber-600 active:bg-amber-500 border-l border-slate-600 active:text-white active:scale-95 z-20 transition-all cursor-pointer shadow-md"
+                          title="Derecha (D / →)"
+                        >
+                          <span className="text-[7px] font-mono font-black text-slate-300 leading-none">D</span>
+                          <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Right side: Arcade Skill Console (Circle design restored with keyboard badges) */}
+                    <div className="select-none pointer-events-auto bg-slate-950 border border-slate-700/80 rounded-full p-1 flex items-center justify-center w-[145px] h-[145px] sm:w-[155px] sm:h-[155px] shadow-xl">
+                      <div className="relative w-32 h-32 sm:w-36 sm:h-36 scale-95 sm:scale-100 flex items-center justify-center">
+                        
+                        {/* Main Attack (GUM-GUM PISTOL) - Large Red Button + [ESPACIO] Badge */}
+                        <button
+                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); executeAttack('pistol'); }}
+                          onClick={() => executeAttack('pistol')}
+                          className="absolute bottom-0 right-0 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-b from-red-500 to-red-700 hover:from-red-400 hover:to-red-600 border-2 border-red-300 rounded-full flex flex-col items-center justify-center text-white active:scale-95 shadow-lg focus:outline-none z-20 transition-all cursor-pointer active:brightness-125 group"
+                          title="Pistola Gum-Gum (Tecla Espacio)"
+                        >
+                          <span className="text-base sm:text-xl leading-none">👊</span>
+                          <span className="text-[6.5px] sm:text-[7.5px] font-mono font-black tracking-tighter uppercase text-yellow-300 leading-none">PISTOLA</span>
+                          <span className="absolute -top-1 -right-1 bg-slate-900 border border-red-400 text-red-200 text-[6.5px] px-1 rounded font-mono font-black shadow">SPC</span>
+                        </button>
+
+                        {/* Giro Evasivo (Dash/Slide) - Teal Button + [SHIFT] Badge */}
+                        <button
+                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); makeRoll(); }}
+                          onClick={() => makeRoll()}
+                          className="absolute bottom-0 left-1 w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-b from-teal-500 to-teal-700 hover:from-teal-400 border-2 border-teal-300 rounded-full flex flex-col items-center justify-center text-white active:scale-95 shadow-md focus:outline-none z-10 transition-all cursor-pointer"
+                          title="Giro Evasivo (Tecla Shift)"
+                        >
+                          <span className="text-xs sm:text-sm text-teal-100 leading-none">🌀</span>
+                          <span className="text-[6.5px] sm:text-[7.5px] font-mono font-black tracking-tighter uppercase text-teal-200 leading-none">GIRO</span>
+                          <span className="absolute -bottom-1 -left-1 bg-slate-900 border border-teal-400 text-teal-200 text-[6px] px-0.5 rounded font-mono font-black">SHIFT</span>
+                        </button>
+
+                        {/* Gum-Gum Metralleta - Yellow Button + [E] Badge */}
+                        <button
+                          onTouchStart={(e) => { if (player.haki >= 10) { e.preventDefault(); e.stopPropagation(); executeAttack('gatling'); } }}
+                          onClick={() => executeAttack('gatling')}
+                          disabled={player.haki < 10}
+                          className={`absolute top-1 left-0 w-10 h-10 sm:w-11 sm:h-11 border-2 rounded-full flex flex-col items-center justify-center active:scale-95 shadow-md focus:outline-none z-10 transition-all cursor-pointer ${
+                            player.haki >= 10
+                              ? 'bg-gradient-to-b from-amber-400 to-amber-600 border-yellow-300 active:bg-amber-400 text-slate-950 font-black hover:brightness-110'
+                              : 'bg-slate-900 border-slate-800 text-slate-600 opacity-40 cursor-not-allowed'
+                          }`}
+                          title="Metralleta (10 Haki - Tecla E)"
+                        >
+                          <span className="text-xs sm:text-sm leading-none">💥</span>
+                          <span className="text-[6.5px] sm:text-[7.5px] font-mono font-black tracking-tighter uppercase leading-none">METRAL</span>
+                          <span className="absolute -top-1 -left-1 bg-slate-900 border border-amber-400 text-amber-300 text-[7px] px-1 rounded font-mono font-black">E</span>
+                        </button>
+
+                        {/* Gum-Gum Látigo - Purple Button + [R] Badge */}
+                        <button
+                          onTouchStart={(e) => { if (player.haki >= 15) { e.preventDefault(); e.stopPropagation(); executeAttack('whip'); } }}
+                          onClick={() => executeAttack('whip')}
+                          disabled={player.haki < 15}
+                          className={`absolute top-0 right-1 w-10 h-10 sm:w-11 sm:h-11 border-2 rounded-full flex flex-col items-center justify-center active:scale-95 shadow-md focus:outline-none z-10 transition-all cursor-pointer ${
+                            player.haki >= 15
+                              ? 'bg-gradient-to-b from-purple-500 to-purple-700 border-purple-300 text-purple-100 font-extrabold hover:brightness-110'
+                              : 'bg-slate-900 border-slate-800 text-slate-600 opacity-45 cursor-not-allowed'
+                          }`}
+                          title="Látigo (15 Haki - Tecla R)"
+                        >
+                          <span className="text-xs sm:text-sm leading-none">🌪️</span>
+                          <span className="text-[6.5px] sm:text-[7.5px] font-mono font-black tracking-tighter uppercase leading-none">LÁTIGO</span>
+                          <span className="absolute -top-1 -right-1 bg-slate-900 border border-purple-400 text-purple-300 text-[7px] px-1 rounded font-mono font-black">R</span>
+                        </button>
+
+                        {/* Eat Meat / Carne - Coral Button + [Q] Badge */}
+                        <button
+                          onTouchStart={(e) => { if (player.meatCount > 0) { e.preventDefault(); e.stopPropagation(); eatMeat(); } }}
+                          onClick={() => eatMeat()}
+                          disabled={player.meatCount === 0}
+                          className={`absolute top-[-6px] left-[36px] sm:left-[44px] w-9 h-9 sm:w-10 sm:h-10 border-2 rounded-full flex flex-col items-center justify-center active:scale-95 shadow-md focus:outline-none z-15 transition-all cursor-pointer ${
+                            player.meatCount > 0
+                              ? 'bg-gradient-to-b from-rose-400 to-rose-600 border-rose-300 text-rose-50 hover:brightness-110'
+                              : 'bg-slate-900 border-slate-800 text-slate-600 opacity-40 cursor-not-allowed'
+                          }`}
+                          title="Comer Carne (Tecla Q)"
+                        >
+                          <span className="text-xs sm:text-sm leading-none">🍖</span>
+                          <span className="text-[6.5px] font-black leading-none bg-rose-950 border border-rose-400 px-1 py-0.2 rounded-full absolute -top-1 -right-1 text-rose-200 shrink-0">
+                            {player.meatCount}
+                          </span>
+                          <span className="absolute -bottom-1 bg-slate-900 border border-rose-400 text-rose-300 text-[6.5px] px-1 rounded font-mono font-black">Q</span>
+                        </button>
+                        
+                      </div>
+                    </div>
+
                   </div>
                 )}
               </div>
