@@ -60,20 +60,20 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
         style={{ transform: `scaleX(${scaleX})` }}
       >
         {/* Shadow */}
-        <ellipse cx="32" cy="54" rx="14" ry="4" fill="rgba(15,23,42,0.55)" />
+        <rect x="18" y="52" width="28" height="4" rx="2" fill="rgba(15,23,42,0.55)" />
 
         {/* --- BACK HAIR (Fucsia Curly Volume) --- */}
         <g style={{ transform: `translateY(${hairY}px)` }}>
           {/* Big puffy curly background hair bulbs */}
-          <circle cx="18" cy="27" r="9" fill="#EC4899" stroke="#9D174D" strokeWidth="1.8" />
-          <circle cx="46" cy="27" r="9" fill="#EC4899" stroke="#9D174D" strokeWidth="1.8" />
-          <circle cx="16" cy="38" r="9.5" fill="#DB2777" stroke="#9D174D" strokeWidth="1.8" />
-          <circle cx="48" cy="38" r="9.5" fill="#DB2777" stroke="#9D174D" strokeWidth="1.8" />
-          <circle cx="23" cy="44" r="8" fill="#BE185D" stroke="#9D174D" strokeWidth="1.5" />
-          <circle cx="41" cy="44" r="8" fill="#BE185D" stroke="#9D174D" strokeWidth="1.5" />
+          <rect x="9" y="18" width="18" height="18" rx="9" fill="#EC4899" stroke="#9D174D" strokeWidth="1.8" />
+          <rect x="37" y="18" width="18" height="18" rx="9" fill="#EC4899" stroke="#9D174D" strokeWidth="1.8" />
+          <rect x="6.5" y="28.5" width="19" height="19" rx="9.5" fill="#DB2777" stroke="#9D174D" strokeWidth="1.8" />
+          <rect x="38.5" y="28.5" width="19" height="19" rx="9.5" fill="#DB2777" stroke="#9D174D" strokeWidth="1.8" />
+          <rect x="15" y="36" width="16" height="16" rx="8" fill="#BE185D" stroke="#9D174D" strokeWidth="1.5" />
+          <rect x="33" y="36" width="16" height="16" rx="8" fill="#BE185D" stroke="#9D174D" strokeWidth="1.5" />
 
           {/* Central top knot ponytail / high bun */}
-          <ellipse cx="32" cy="11" rx="6.5" ry="7.5" fill="#F43F5E" stroke="#9D174D" strokeWidth="1.8" />
+          <rect x="25.5" y="3.5" width="13" height="15" rx="6.5" fill="#F43F5E" stroke="#9D174D" strokeWidth="1.8" />
           <rect x="28.5" y="15" width="7" height="3" rx="0.8" fill="#F59E0B" stroke="#B45309" strokeWidth="0.8" />
         </g>
 
@@ -103,24 +103,24 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
           <path d="M26,23 L32,28 L38,23" stroke="#C084FC" strokeWidth="2.2" strokeLinecap="round" fill="none" />
 
           {/* Arms */}
-          <circle cx="19" cy="30" r="3.5" fill="#FBCFE8" stroke="#DB2777" strokeWidth="1" />
-          <circle cx="45" cy="30" r="3.5" fill="#FBCFE8" stroke="#DB2777" strokeWidth="1" />
+          <rect x="15.5" y="26.5" width="7" height="7" rx="3.5" fill="#FBCFE8" stroke="#DB2777" strokeWidth="1" />
+          <rect x="41.5" y="26.5" width="7" height="7" rx="3.5" fill="#FBCFE8" stroke="#DB2777" strokeWidth="1" />
 
           {/* Head & Face */}
-          <circle cx="32" cy="24" r="9" fill="#FFE4E6" stroke="#970634" strokeWidth="1.8" />
+          <rect x="23" y="15" width="18" height="18" rx="9" fill="#FFE4E6" stroke="#970634" strokeWidth="1.8" />
 
           {/* Bright blushing cheeks */}
-          <circle cx="27" cy="25.5" r="2" fill="#F472B6" opacity="0.65" />
-          <circle cx="37" cy="25.5" r="2" fill="#F472B6" opacity="0.65" />
+          <rect x="25" y="23.5" width="4" height="4" rx="2" fill="#F472B6" opacity="0.65" />
+          <rect x="35" y="23.5" width="4" height="4" rx="2" fill="#F472B6" opacity="0.65" />
 
           {/* Face details: Eye Shock or Smirk */}
           {isStunned ? (
             <>
               {/* Massive shocked comically dizzy eyes */}
-              <circle cx="27" cy="23" r="4.2" fill="#FFFFFF" stroke="#000000" strokeWidth="1" />
-              <circle cx="37" cy="23" r="4.2" fill="#FFFFFF" stroke="#000000" strokeWidth="1" />
-              <circle cx="27" cy="23" r="1.2" fill="#000000" />
-              <circle cx="37" cy="23" r="1.2" fill="#000000" />
+              <rect x="22.8" y="18.8" width="8.4" height="8.4" rx="4.2" fill="#FFFFFF" stroke="#000000" strokeWidth="1" />
+              <rect x="32.8" y="18.8" width="8.4" height="8.4" rx="4.2" fill="#FFFFFF" stroke="#000000" strokeWidth="1" />
+              <rect x="25.8" y="21.8" width="2.4" height="2.4" rx="1.2" fill="#000000" />
+              <rect x="35.8" y="21.8" width="2.4" height="2.4" rx="1.2" fill="#000000" />
               {/* Shaking wavy mouth */}
               <path d="M28,29.5 Q32,28 36,29.5" stroke="#1E293B" strokeWidth="1.5" fill="none" />
               {/* Tiny crying teardrop */}
@@ -129,8 +129,8 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
           ) : (
             <>
               {/* Determination eyes and dark pupils */}
-              <ellipse cx="27.5" cy="23" rx="1.8" ry="1.5" fill="#0E172C" />
-              <ellipse cx="36.5" cy="23" rx="1.8" ry="1.5" fill="#0E172C" />
+              <rect x="25.7" y="21.5" width="3.6" height="3" rx="1.5" fill="#0E172C" />
+              <rect x="34.7" y="21.5" width="3.6" height="3" rx="1.5" fill="#0E172C" />
               {/* Thick dark pink eyebrows */}
               <path d="M25,20.5 Q27.5,19.5 29.5,21.5" stroke="#9D174D" strokeWidth="1.8" fill="none" strokeLinecap="round" />
               <path d="M39,20.5 Q36.5,19.5 34.5,21.5" stroke="#9D174D" strokeWidth="1.8" fill="none" strokeLinecap="round" />
@@ -167,15 +167,15 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
               <rect x="14.5" y="16" width="3" height="15" rx="1" fill="#4B5563" stroke="#1F2937" strokeWidth="1" />
               {/* Heavy Studded Iron Head */}
               <path d="M8,4 L24,4 L27,18 L5,18 Z" fill="#334155" stroke="#0F172A" strokeWidth="1.8" />
-              <ellipse cx="16" cy="6" rx="8" ry="2.5" fill="#475569" />
+              <rect x="8" y="3.5" width="16" height="5" rx="2.5" fill="#475569" />
 
               {/* Steel shining studs (Spikes) */}
-              <circle cx="10" cy="8" r="1.2" fill="#E2E8F0" />
-              <circle cx="16" cy="8" r="1.2" fill="#E2E8F0" />
-              <circle cx="22" cy="8" r="1.2" fill="#E2E8F0" />
-              <circle cx="11" cy="13" r="1.2" fill="#E2E8F0" />
-              <circle cx="16" cy="13" r="1.2" fill="#E2E8F0" />
-              <circle cx="21" cy="13" r="1.2" fill="#E2E8F0" />
+              <rect x="8.8" y="6.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
+              <rect x="14.8" y="6.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
+              <rect x="20.8" y="6.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
+              <rect x="9.8" y="11.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
+              <rect x="14.8" y="11.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
+              <rect x="19.8" y="11.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
 
               {/* Spike thorns sticking outward of the outline */}
               <polygon points="5,8 1.5,6 5,10" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />

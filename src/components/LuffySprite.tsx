@@ -218,8 +218,8 @@ export const LuffySprite: React.FC<LuffySpriteProps> = ({ direction, actionState
                   <rect x="15.5" y="6.8" width="1" height="2.5" fill={C_HAIR} />
                   
                   {/* Expressive happy eyes and grin */}
-                  <circle cx="10" cy="8.2" r="0.6" fill={C_HAIR} />
-                  <circle cx="14" cy="8.2" r="0.6" fill={C_HAIR} />
+                  <rect x="9.5" y="7.8" width="1.2" height="1.2" fill={C_HAIR} />
+                  <rect x="13.5" y="7.8" width="1.2" height="1.2" fill={C_HAIR} />
                   {/* Grinning teeth line */}
                   <rect x="10.5" y="9.2" width="3" height="1.2" fill="#ffffff" stroke="#18181b" strokeWidth="0.5" />
 
@@ -297,10 +297,10 @@ export const LuffySprite: React.FC<LuffySpriteProps> = ({ direction, actionState
                     <path d="M18.5 20.8 C19.5 22 21.5 21 23 19.5" stroke="#4b5563" strokeWidth="0.8" fill="none" />
 
                     {/* Small white dust/smoke rings puffing on ground */}
-                    <circle cx="2" cy="18" r="1.8" fill="#f1f5f9" opacity="0.75" />
-                    <circle cx="21" cy="18" r="1.8" fill="#f1f5f9" opacity="0.75" />
-                    <circle cx="1" cy="16.5" r="1" fill="#cbd5e1" opacity="0.5" />
-                    <circle cx="22.5" cy="16.5" r="1" fill="#cbd5e1" opacity="0.5" />
+                    <rect x="1.5" y="17.5" width="2" height="2" rx="1" fill="#f1f5f9" opacity="0.75" />
+                    <rect x="20.5" y="17.5" width="2" height="2" rx="1" fill="#f1f5f9" opacity="0.75" />
+                    <rect x="0.8" y="16" width="1.2" height="1.2" rx="0.6" fill="#cbd5e1" opacity="0.5" />
+                    <rect x="22" y="16" width="1.2" height="1.2" rx="0.6" fill="#cbd5e1" opacity="0.5" />
                   </g>
                 </g>
               )}

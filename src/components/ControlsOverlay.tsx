@@ -1,5 +1,8 @@
-import React from 'react';
-import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Shield, Award, HeartHandshake } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Shield, Award, HeartHandshake, Eye } from 'lucide-react';
+import { ZoroSprite } from './ZoroSprite';
+import { LuffySprite } from './LuffySprite';
+import { MarineSprite } from './MarineSprite';
 
 interface ControlsOverlayProps {
   onMove: (dir: 'up' | 'down' | 'left' | 'right') => void;
@@ -18,15 +21,63 @@ export const ControlsOverlay: React.FC<ControlsOverlayProps> = ({
   meatCount,
   haki,
 }) => {
+  const [selectedPreview, setSelectedPreview] = useState<'zack' | 'luffy' | 'morgan'>('zack');
+
   return (
     <div className="w-full flex flex-col sm:grid sm:grid-cols-2 lg:flex lg:flex-col gap-3.5 bg-slate-900/95 border-2 border-slate-800 p-3.5 rounded-2xl shadow-2xl select-none items-stretch">
       
       {/* Upper Column: Active Game Info Banner */}
       <div className="col-span-1 sm:col-span-2 flex items-center justify-between border-b-2 border-slate-800/80 pb-2 flex-wrap gap-2">
         <span className="text-amber-400 font-mono font-black uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-          ⚔️ PODERES Y CONTROLES GUM-GUM
+          ⚔️ GALERÍA DE ANIMACIONES EN VIVO
         </span>
-        <span className="text-[9px] font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-800 rounded px-1.5 py-0.5 uppercase tracking-widest font-bold">Teclado Activo (PC)</span>
+        <div className="flex gap-1">
+          <button
+            onClick={() => setSelectedPreview('zack')}
+            className={`px-1.5 py-0.5 rounded text-[8px] font-mono font-bold uppercase transition-all cursor-pointer ${
+              selectedPreview === 'zack' ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'
+            }`}
+          >
+            Zack
+          </button>
+          <button
+            onClick={() => setSelectedPreview('luffy')}
+            className={`px-1.5 py-0.5 rounded text-[8px] font-mono font-bold uppercase transition-all cursor-pointer ${
+              selectedPreview === 'luffy' ? 'bg-red-500 text-white font-black' : 'bg-slate-800 text-slate-400'
+            }`}
+          >
+            Luffy
+          </button>
+          <button
+            onClick={() => setSelectedPreview('morgan')}
+            className={`px-1.5 py-0.5 rounded text-[8px] font-mono font-bold uppercase transition-all cursor-pointer ${
+              selectedPreview === 'morgan' ? 'bg-blue-500 text-white font-black' : 'bg-slate-800 text-slate-400'
+            }`}
+          >
+            Morgan
+          </button>
+        </div>
+      </div>
+
+      {/* Live Animated Sprite Viewer Box */}
+      <div className="col-span-1 sm:col-span-2 bg-slate-950/80 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between gap-3">
+        <div className="w-16 h-16 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center relative overflow-hidden shrink-0">
+          {selectedPreview === 'zack' && <ZoroSprite isChained={false} actionState="idle" />}
+          {selectedPreview === 'luffy' && <LuffySprite direction="right" actionState="idle" x={1} y={1} />}
+          {selectedPreview === 'morgan' && <MarineSprite type="morgan" state="chasing" direction="right" />}
+        </div>
+        <div className="flex-1 flex flex-col justify-center text-left">
+          <div className="text-[10px] font-mono font-black text-amber-400 uppercase">
+            {selectedPreview === 'zack' && '⚔️ Zack "Tres Filos" (Santoryu)'}
+            {selectedPreview === 'luffy' && '👒 Luffy Hombre de Goma'}
+            {selectedPreview === 'morgan' && '🪓 Capitán Hacha-Hierro'}
+          </div>
+          <div className="text-[8px] text-slate-400 font-mono leading-tight mt-0.5">
+            {selectedPreview === 'zack' && 'Espadachín de 3 katanas. Corta puertas pesadas y rejas de mazmorra.'}
+            {selectedPreview === 'luffy' && 'Capitán de goma. Ataques de estiramiento: Pistola, Metralleta y Giro.'}
+            {selectedPreview === 'morgan' && 'Tirano de la Fortaleza. Brazo derecho de hacha gigante y mandíbula de hierro.'}
+          </div>
+        </div>
       </div>
 
       {/* Left Column (sm) / Top Row (lg): Digital D-Pad movement controls */}

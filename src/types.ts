@@ -57,7 +57,19 @@ export type CellType =
   | 'zoro-chained'
   | 'zoro-free'
   | 'floor'
-  | 'stairs';
+  | 'stairs'
+  | 'house-door'
+  | 'house-roof'
+  | 'flower'
+  | 'npc-nina'
+  | 'npc-villager'
+  | 'switch-off'
+  | 'switch-on'
+  | 'pot'
+  | 'pot-broken'
+  | 'torch'
+  | 'bridge'
+  | 'wall-stone';
 
 export interface Cell {
   x: number;

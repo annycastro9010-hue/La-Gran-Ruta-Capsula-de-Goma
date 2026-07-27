@@ -19,19 +19,19 @@ const BASEMENT_TEMPLATE = [
   ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // 11
 ];
 
-// LEVEL 2: LA CUBIERTA SUPERIOR (Upper deck of Alvida's ship, surrounded by water)
+// LEVEL 2: PUEBLO Y FORTALEZA SHELLPORT (Estilo Zelda: Minish Cap)
 const DECK_TEMPLATE = [
-  ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'], // 0
-  ['O', 'O', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'O', 'O'], // 1
-  ['O', 'W', 'E', 'E', 'B', 'W', 'E', 'E', 'E', 'W', 'S', 'E', 'E', 'E', 'W', 'O'], // 2  -- S = Chest containing Map of Grand Line inside the Cabin
-  ['O', 'W', 'E', 'M', 'E', 'L', 'E', 'E', 'E', 'L', 'E', 'M', 'E', 'E', 'W', 'O'], // 3  -- L = Locked Cabins door
-  ['W', 'W', 'D', 'D', 'D', 'W', 'D', 'D', 'D', 'W', 'D', 'D', 'D', 'D', 'W', 'W'], // 4
-  ['W', 'T', 'D', 'B', 'D', 'W', 'D', 'D', 'D', 'W', 'D', 'B', 'D', 'B', 'D', 'W'], // 5  -- T = Stairs coming UP from Level 1 Basement!
-  ['W', 'D', 'D', 'D', 'D', 'W', 'W', 'L', 'W', 'W', 'D', 'D', 'D', 'D', 'D', 'W'], // 6
-  ['O', 'W', 'D', 'M', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'M', 'D', 'D', 'W', 'O'], // 7
-  ['O', 'W', 'D', 'D', 'B', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'B', 'C', 'W', 'O'], // 8  -- C = Chest with Cabin Key to unlock Alvida's suite
-  ['O', 'O', 'W', 'W', 'W', 'D', 'D', 'B', 'D', 'D', 'W', 'W', 'W', 'W', 'O', 'O'], // 9
-  ['O', 'O', 'O', 'O', 'O', 'W', 'W', 'W', 'W', 'W', 'O', 'O', 'O', 'O', 'O', 'O'], // 10 -- (1,10) is the escape lifeboat ⛵!
+  ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // 0
+  ['W', 'H', 'H', 'W', 'D', 'F', 'D', 'W', 'G', 'G', 'G', 'W', 'G', 'Y', 'S', 'W'], // 1 -- H = Casa, S = Katanas de Zack, Y = Vasija
+  ['W', 'P', 'N', 'W', 'D', 'D', 'D', 'W', 'G', 'R', 'G', 'W', 'G', 'E', 'G', 'W'], // 2 -- P = Puerta Casa, N = Nina, R = Antorcha
+  ['W', 'W', 'D', 'W', 'W', 'D', 'W', 'L', 'D', 'L', 'W', 'W', 'D', 'W', 'W', 'W'], // 3 -- L = Rejas Fortaleza
+  ['W', 'D', 'F', 'D', 'D', 'D', 'W', 'R', 'Z', 'R', 'W', 'D', 'D', 'D', 'D', 'W'], // 4 -- Z = Zack encadenado entre R (antorchas)
+  ['W', 'D', 'V', 'B', 'D', 'D', 'W', 'D', 'U', 'D', 'W', 'D', 'Y', 'Y', 'D', 'W'], // 5 -- V = Aldeano, U = Botón que abre rejas (8,5)
+  ['W', 'D', 'D', 'D', 'D', 'D', 'W', 'W', 'L', 'W', 'W', 'D', 'D', 'D', 'D', 'W'], // 6
+  ['W', 'D', 'W', 'D', 'W', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'W', 'D', 'W', 'W'], // 7
+  ['W', 'E', 'B', 'E', 'W', 'O', 'O', '=', '=', 'O', 'O', 'D', 'W', 'E', 'C', 'W'], // 8 -- = = Puente de Madera sobre arroyo O
+  ['W', 'E', 'E', 'E', 'W', 'O', 'O', 'D', 'D', 'O', 'O', 'D', 'W', 'E', 'E', 'W'], // 9
+  ['O', 'O', 'T', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'W', 'W', 'W', 'W'], // 10 -- T = Bote de escape (2,10)
   ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'], // 11
 ];
 
@@ -83,8 +83,42 @@ const SYRUP_VILLAGE_TEMPLATE = [
   ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'], // 11
 ];
 
-export function buildInitialGrid(level: number = 1): Cell[][] {
+// LEVEL 2 HOUSE INTERIOR - 1ST FLOOR (Interior de la Casa del Pueblo - Mazmorra Minish Cap)
+const HOUSE_1F_TEMPLATE = [
+  ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // 0
+  ['W', 'R', 'E', 'R', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'E', 'T', 'W', 'W'], // 1 -- T = Escaleras al 2do Piso (13,1)
+  ['W', 'E', 'Y', 'E', 'W', 'E', 'E', 'U', 'E', 'E', 'E', 'W', 'E', 'E', 'W', 'W'], // 2 -- U = Interruptor en piso (7,2), Y = Vasijas
+  ['W', 'E', 'E', 'E', 'W', 'E', 'M', 'E', 'E', 'M', 'E', 'W', 'E', 'Y', 'W', 'W'], // 3 -- M = Mesa de madera
+  ['W', 'W', 'L', 'W', 'W', 'E', 'E', 'E', 'E', 'E', 'E', 'W', 'W', 'E', 'W', 'W'], // 4 -- L = Reja bloqueada
+  ['W', 'E', 'E', 'E', 'W', 'E', 'E', 'N', 'E', 'E', 'E', 'W', 'E', 'E', 'W', 'W'], // 5 -- N = Nina
+  ['W', 'E', 'Y', 'E', 'W', 'W', 'W', 'P', 'W', 'W', 'W', 'W', 'E', 'C', 'W', 'W'], // 6 -- P = Puerta de salida al pueblo (7,6), C = Cofre de Llave
+  ['W', 'R', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'R', 'W', 'W'], // 7 -- R = Antorchas en pared
+  ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // 8
+  ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // 9
+  ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // 10
+  ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // 11
+];
+
+// LEVEL 2 HOUSE INTERIOR - 2ND FLOOR (Segundo Piso / Armería Secreta)
+const HOUSE_2F_TEMPLATE = [
+  ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // 0 -- G = Muros de piedra blanca
+  ['G', 'R', 'Y', 'R', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'E', 'T', 'G', 'G'], // 1 -- T = Escaleras al 1er Piso (13,1)
+  ['G', 'E', 'E', 'E', 'G', 'E', 'E', 'E', 'E', 'E', 'E', 'G', 'E', 'E', 'G', 'G'], // 2
+  ['G', 'E', 'Y', 'E', 'G', 'R', 'Y', 'E', 'E', 'Y', 'R', 'G', 'E', 'S', 'G', 'G'], // 3 -- S = Cofre de las 3 Katanas de Zack (13,3)
+  ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // 4
+  ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // 5
+  ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // 6
+  ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // 7
+  ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // 8
+  ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // 9
+  ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // 10
+  ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // 11
+];
+
+export function buildInitialGrid(level: number = 1, subMap: string = 'main'): Cell[][] {
   const template = 
+    subMap === 'house_1f' ? HOUSE_1F_TEMPLATE :
+    subMap === 'house_2f' ? HOUSE_2F_TEMPLATE :
     level === 1 ? BASEMENT_TEMPLATE : 
     level === 2 ? DECK_TEMPLATE : 
     level === 3 ? MARINE_BASE_TEMPLATE :
@@ -137,6 +171,36 @@ export function buildInitialGrid(level: number = 1): Cell[][] {
         case 'C':
           type = 'chest';
           item = 'key';
+          break;
+        case 'H':
+          type = 'house-roof';
+          break;
+        case 'P':
+          type = 'house-door';
+          break;
+        case 'F':
+          type = 'flower';
+          break;
+        case 'N':
+          type = 'npc-nina';
+          break;
+        case 'V':
+          type = 'npc-villager';
+          break;
+        case 'U':
+          type = 'switch-off';
+          break;
+        case 'Y':
+          type = 'pot';
+          break;
+        case 'R':
+          type = 'torch';
+          break;
+        case '=':
+          type = 'bridge';
+          break;
+        case 'G':
+          type = 'wall-stone';
           break;
         case 'S':
           type = 'chest';
@@ -217,97 +281,79 @@ export function getInitialEnemies(level: number = 1): Enemy[] {
       }
     ];
   } else if (level === 2) {
-    // LEVEL 2: Main Deck
+    // LEVEL 2: Pueblo y Fortaleza Shellport (Rescate de Zack)
     return [
       {
-        id: 'deck_pirate_1',
-        type: 'pirate',
+        id: 'sentinel_1',
+        type: 'marine',
         x: 3,
-        y: 7,
-        direction: 'right',
-        hp: 15,
-        maxHp: 15,
-        speed: 1,
-        patrolPath: [
-          { x: 3, y: 7 },
-          { x: 5, y: 7 },
-          { x: 5, y: 8 },
-          { x: 2, y: 8 },
-        ],
-        patrolIndex: 0,
-        state: 'patrolling',
-        actionTimer: 0,
-      },
-      {
-        id: 'deck_pirate_2',
-        type: 'pirate',
-        x: 8,
-        y: 7,
-        direction: 'left',
-        hp: 15,
-        maxHp: 15,
-        speed: 1,
-        patrolPath: [
-          { x: 8, y: 7 },
-          { x: 10, y: 7 },
-          { x: 10, y: 8 },
-          { x: 8, y: 8 },
-        ],
-        patrolIndex: 0,
-        state: 'patrolling',
-        actionTimer: 0,
-      },
-      {
-        id: 'deck_officer_1',
-        type: 'pirate-officer',
-        x: 7,
         y: 5,
-        direction: 'down',
+        direction: 'right',
         hp: 25,
         maxHp: 25,
-        speed: 1.3,
-        patrolPath: [
-          { x: 7, y: 5 },
-          { x: 8, y: 5 },
-          { x: 6, y: 5 },
-        ],
-        patrolIndex: 0,
-        state: 'patrolling',
-        actionTimer: 0,
-      },
-      {
-        id: 'deck_cabin_pirate',
-        type: 'pirate',
-        x: 3,
-        y: 2,
-        direction: 'right',
-        hp: 15,
-        maxHp: 15,
         speed: 1,
         patrolPath: [
-          { x: 3, y: 2 },
-          { x: 4, y: 2 },
-          { x: 2, y: 2 },
+          { x: 3, y: 5 },
+          { x: 5, y: 5 },
+          { x: 5, y: 7 },
+          { x: 3, y: 7 },
         ],
         patrolIndex: 0,
         state: 'patrolling',
         actionTimer: 0,
       },
       {
-        id: 'boss_alvida',
-        type: 'alvida',
+        id: 'sentinel_2',
+        type: 'marine',
+        x: 11,
+        y: 5,
+        direction: 'left',
+        hp: 25,
+        maxHp: 25,
+        speed: 1.1,
+        patrolPath: [
+          { x: 11, y: 5 },
+          { x: 14, y: 5 },
+          { x: 14, y: 7 },
+          { x: 11, y: 7 },
+        ],
+        patrolIndex: 0,
+        state: 'patrolling',
+        actionTimer: 0,
+      },
+      {
+        id: 'helmuto',
+        type: 'helmeppo',
         x: 12,
         y: 2,
-        direction: 'down',
-        hp: 85,
-        maxHp: 85,
-        speed: 1.4,
+        direction: 'up',
+        hp: 45,
+        maxHp: 45,
+        speed: 1.25,
         patrolPath: [
           { x: 12, y: 2 },
-          { x: 13, y: 2 },
-          { x: 13, y: 3 },
-          { x: 11, y: 3 },
-          { x: 11, y: 2 },
+          { x: 14, y: 2 },
+          { x: 14, y: 1 },
+          { x: 12, y: 1 },
+        ],
+        patrolIndex: 0,
+        state: 'patrolling',
+        actionTimer: 0,
+      },
+      {
+        id: 'boss_iron_axe',
+        type: 'morgan',
+        x: 8,
+        y: 5,
+        direction: 'left',
+        hp: 110,
+        maxHp: 110,
+        speed: 1.4,
+        patrolPath: [
+          { x: 8, y: 5 },
+          { x: 9, y: 5 },
+          { x: 9, y: 6 },
+          { x: 8, y: 6 },
         ],
         patrolIndex: 0,
         state: 'patrolling',
@@ -688,7 +734,7 @@ export const ZORO_MEET_DIALOGUES: DialogueSequence = {
   ],
 };
 
-// Dialogue triggered when arriving on Level 2 (Cubierta)
+// Dialogue triggered when arriving on Level 2 (Pueblo Shellport)
 export const DECK_TRANSITION_DIALOGUES: DialogueSequence = {
   currentIndex: 0,
   dialogues: [
@@ -696,25 +742,25 @@ export const DECK_TRANSITION_DIALOGUES: DialogueSequence = {
       id: 'dt1',
       speaker: 'Koby',
       avatar: ' Koby con esperanza',
-      text: '¡SIII! ¡Logramos subir por las escaleras a la Cubierta Principal del Barco! ¡Mira el hermoso cielo azul y el océano!',
+      text: '¡Llegamos a Pueblo Shellport! El hábil espadachín Zack está prisionero en el patio de la Fortaleza militar.',
     },
     {
       id: 'dt2',
       speaker: 'Luffy',
       avatar: ' Luffy sonriendo',
-      text: '¡Vaya! ¡Huele delicioso a mar! ¡Y hay mucha brisa fresca!',
+      text: '¡Genial! Si es tan fuerte como dicen, ¡le pediré que sea el primer socio de nuestra tripulación! ¡Shishishi!',
     },
     {
       id: 'dt3',
       speaker: 'Koby',
       avatar: ' Koby tenso',
-      text: '¡Pero mantente alerta! La Capitana Alvida está patrullando cerca de sus camarotes. ¡Y esconde el Mapa del Grand Line en un cofre sellado!',
+      text: '¡Ten cuidado, Luffy! El tirano Comandante Hacha-Hierro gobierna el pueblo. Sus guardias patrullan la plaza y tienen las 3 katanas de Zack bajo llave.',
     },
     {
       id: 'dt4',
       speaker: 'Luffy',
       avatar: ' Luffy puño',
-      text: '¡Perfecto! ¡Derrotaré a esa vieja con pecas, tomaremos el mapa y escaparemos en el bote salvavidas en el muelle (1, 10)! ¡Prepárate!',
+      text: '¡Buscamos la llave en el cofre en (14, 8), recuperamos sus espadas en (14, 1), liberamos a Zack y vencemos a Hacha-Hierro! ¡A la carga!',
     },
   ],
 };

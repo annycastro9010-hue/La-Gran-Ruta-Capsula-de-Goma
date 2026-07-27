@@ -27,6 +27,7 @@ import { DialogueBox } from './components/DialogueBox';
 import { ControlsOverlay } from './components/ControlsOverlay';
 import { playSound } from './utils/sound';
 import { getPasherTheme } from './utils/pasher';
+import { PhaserGameContainer } from './game/PhaserGameContainer';
 import { Volume2, Trophy, RefreshCw, Flame, Navigation, Key, HelpCircle, Swords, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -69,7 +70,9 @@ export default function App() {
       return () => window.removeEventListener('resize', handleResize);
     }
   }, []);
-  const [status, setStatus] = useState<GameStatus>('intro');
+  const [status, setStatus] = useState<GameStatus>('playing');
+  const [engineMode, setEngineMode] = useState<'phaser' | 'grid'>('grid');
+  const [subMap, setSubMap] = useState<string>('main');
   const [grid, setGrid] = useState<Cell[][]>([]);
   const [enemies, setEnemies] = useState<Enemy[]>([]);
   const [player, setPlayer] = useState<PlayerState>({
@@ -96,7 +99,7 @@ export default function App() {
   }>({
     dialogues: INTRO_DIALOGUES.dialogues,
     currentIndex: 0,
-    triggerType: 'intro'
+    triggerType: null
   });
 
   // Triggers tracker to make sure story cutscenes only play once!
@@ -323,7 +326,12 @@ export default function App() {
       });
     }
     
-    setStatus('intro');
+    setStatus('playing');
+    setDialogueSeq({
+      dialogues: [],
+      currentIndex: 0,
+      triggerType: null
+    });
     playSound('unlock');
   }, []);
 
@@ -609,9 +617,39 @@ export default function App() {
         const cell = grid[targetY][targetX];
 
         // Hit list obstacles
-        if (cell.type === 'wall' || cell.type === 'water' || cell.type === 'mast' || cell.type === 'koby-scared' || cell.type === 'zoro-chained') {
+        if (cell.type === 'wall' || cell.type === 'wall-stone' || cell.type === 'water' || cell.type === 'mast' || cell.type === 'koby-scared' || cell.type === 'zoro-chained') {
           canMove = false;
           playSound('hit');
+        } else if (cell.type === 'switch-off') {
+          canMove = true;
+          playSound('unlock');
+          spawnFloatingText(targetX, targetY, '🔘 ¡INTERRUPTOR ACTIVADO!', 'text-yellow-300 font-extrabold animate-bounce');
+          setGrid((prevGrid) => {
+            const copied = prevGrid.map(row => [...row]);
+            copied[targetY][targetX] = { ...copied[targetY][targetX], type: 'switch-on' };
+            // Unlock locked doors in dungeon
+            for (let r = 0; r < copied.length; r++) {
+              for (let c = 0; c < copied[r].length; c++) {
+                if (copied[r][c].type === 'door-locked') {
+                  copied[r][c] = { ...copied[r][c], type: 'door-open' };
+                }
+              }
+            }
+            return copied;
+          });
+        } else if (cell.type === 'pot') {
+          canMove = true;
+          playSound('pickup');
+          spawnFloatingText(targetX, targetY, '🏺 ¡VASIJA ROTA! 🍖', 'text-amber-400 font-bold');
+          setGrid((prevGrid) => {
+            const copied = prevGrid.map(row => [...row]);
+            copied[targetY][targetX] = {
+              ...copied[targetY][targetX],
+              type: 'pot-broken',
+              item: Math.random() < 0.5 ? 'meat' : 'heart'
+            };
+            return copied;
+          });
         } else if (cell.type === 'door-locked') {
           if (prev.hasKey) {
             // Unlock standard gates
@@ -642,6 +680,26 @@ export default function App() {
         }
       }
 
+      // Handle entering/exiting house door (Minish Cap 1st Floor / Town transition)
+      if (canMove && grid[targetY] && grid[targetY][targetX] && grid[targetY][targetX].type === 'house-door') {
+        if (currentLevel === 2) {
+          if (subMap === 'main') {
+            setSubMap('house_1f');
+            setGrid(buildInitialGrid(2, 'house_1f'));
+            setPlayer(pos => ({ ...pos, x: 7, y: 5 }));
+            playSound('unlock');
+            spawnFloatingText(7, 5, '🏠 ¡ENTRASTE A LA CASA!', 'text-amber-400 font-extrabold animate-bounce');
+          } else {
+            setSubMap('main');
+            setGrid(buildInitialGrid(2, 'main'));
+            setPlayer(pos => ({ ...pos, x: 1, y: 3 }));
+            playSound('unlock');
+            spawnFloatingText(1, 3, '🚪 ¡SALISTE AL PUEBLO!', 'text-yellow-400 font-extrabold animate-bounce');
+          }
+          return prev;
+        }
+      }
+
       // Handle stairs level transition trigger
       if (canMove && grid[targetY] && grid[targetY][targetX] && grid[targetY][targetX].type === 'stairs') {
         if (currentLevel === 1) {
@@ -667,20 +725,19 @@ export default function App() {
           }, 100);
           return prev;
         } else if (currentLevel === 2) {
-          // Transition back down to Level 1 (Basement)
-          setTimeout(() => {
-            setCurrentLevel(1);
-            setGrid(buildInitialGrid(1));
-            setEnemies(getInitialEnemies(1));
-            setPlayer((posPrev) => ({
-              ...posPrev,
-              x: 12,
-              y: 2,
-              hasKey: true, // Keep cellar gate unlock status
-            }));
+          if (subMap === 'house_1f') {
+            setSubMap('house_2f');
+            setGrid(buildInitialGrid(2, 'house_2f'));
+            setPlayer(pos => ({ ...pos, x: 12, y: 1 }));
             playSound('unlock');
-            spawnFloatingText(12, 2, '🪜 ¡BAJASTE AL SÓTANO!', 'text-amber-400 font-extrabold animate-bounce');
-          }, 100);
+            spawnFloatingText(12, 1, '🪜 ¡SUBISTE AL 2DO PISO!', 'text-amber-400 font-extrabold animate-bounce');
+          } else if (subMap === 'house_2f') {
+            setSubMap('house_1f');
+            setGrid(buildInitialGrid(2, 'house_1f'));
+            setPlayer(pos => ({ ...pos, x: 12, y: 1 }));
+            playSound('unlock');
+            spawnFloatingText(12, 1, '🪜 ¡BAJASTE AL 1ER PISO!', 'text-amber-400 font-extrabold animate-bounce');
+          }
           return prev;
         } else if (currentLevel === 3) {
           // Stepping on harbor wharf (2,10) to escape Shells Town
@@ -922,7 +979,7 @@ export default function App() {
 
         // Wipe item from map
         setGrid((prevGrid) => {
-          const copied = [...prevGrid];
+          const copied = prevGrid.map(row => [...row]);
           copied[finalY][finalX] = {
             ...copied[finalY][finalX],
             item: null
@@ -1128,7 +1185,7 @@ export default function App() {
                 currentIndex: 0,
                 triggerType: 'koby-guidance-immediate'
               });
-              setStatus('intro'); // Pause progress and display beautiful dialogue card instructions!
+              // Keep status as 'playing' so gameplay map does NOT unmount!
             }, 600);
           }
         } else if (chestsItem === 'map') {
@@ -1155,7 +1212,15 @@ export default function App() {
             playSound('victory');
             spawnFloatingText(enemy.x, enemy.y, '💀 ¡DERROTADO!', 'text-slate-300 font-bold');
 
-            if (enemy.type === 'morgan') {
+            if (enemy.type === 'alvida') {
+              setTimeout(() => {
+                setDialogueSeq({
+                  dialogues: VICTORY_DIALOGUES.dialogues,
+                  currentIndex: 0,
+                  triggerType: 'victory'
+                });
+              }, 400);
+            } else if (enemy.type === 'morgan') {
               // Trigger final level 3 story cutscene
               setTimeout(() => {
                 setDialogueSeq({
@@ -1342,30 +1407,29 @@ export default function App() {
         } else if (prev.triggerType === 'boss-fight') {
           setStatus('playing');
         } else if (prev.triggerType === 'victory') {
-          // Transition to LEVEL 3 (Base de la Marina)
-          unlockToLevel(3);
-          setCurrentLevel(3);
-          setGrid(buildInitialGrid(3));
-          setEnemies(getInitialEnemies(3));
+          // Transition from Level 1 (Alvida) to Level 2 (Pueblo y Puerto Shellport - Rescate de Zack)
+          unlockToLevel(2);
+          setCurrentLevel(2);
+          setGrid(buildInitialGrid(2));
+          setEnemies(getInitialEnemies(2));
           setPlayer((posPrev) => ({
             ...posPrev,
             x: 1,
-            y: 5, // Spawns near stairs
+            y: 5,
             hasKey: false,
-            hasMap: false,
+            hasMap: true,
             hasSwords: false,
-            haki: 15, // give some initial Haki for level 3
+            haki: 15,
           }));
           playSound('unlock');
-          // Instantly pop up the Zoro level introduction dialogue
           setTimeout(() => {
             setDialogueSeq({
-              dialogues: ZORO_PRISON_DIALOGUES.dialogues,
+              dialogues: DECK_TRANSITION_DIALOGUES.dialogues,
               currentIndex: 0,
-              triggerType: 'zoro-prison'
+              triggerType: 'zoro-meet'
             });
           }, 100);
-          spawnFloatingText(1, 5, '🌴 ¡LLEGASTE A SHELLS TOWN!', 'text-emerald-400 font-extrabold animate-bounce');
+          spawnFloatingText(1, 5, '⛵ ¡LLEGASTE AL PUERTO DE SHELLPORT!', 'text-emerald-400 font-extrabold animate-bounce');
         } else if (prev.triggerType === 'zoro-prison') {
           setStatus('playing');
         } else if (prev.triggerType === 'swords-found') {
@@ -1472,6 +1536,30 @@ export default function App() {
 
         {/* Toggle and Level Objectives checklist and badges */}
         <div className="flex items-center gap-2 sm:gap-3 select-none flex-nowrap overflow-x-auto max-w-full justify-center">
+          
+          {/* Selector de Motor de Juego (Phaser 3 vs Grid) */}
+          <div className="bg-slate-955 border border-emerald-700/60 p-0.5 rounded-lg flex items-center gap-1 font-mono text-[9px] shadow-md shrink-0">
+            <button
+              onClick={() => setEngineMode('phaser')}
+              className={`px-2 py-0.5 rounded transition-all font-bold cursor-pointer uppercase text-[8px] flex items-center gap-1 ${
+                engineMode === 'phaser'
+                  ? 'bg-emerald-500 text-slate-950 font-black shadow'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              🕹️ Phaser 3 (60FPS)
+            </button>
+            <button
+              onClick={() => setEngineMode('grid')}
+              className={`px-2 py-0.5 rounded transition-all font-bold cursor-pointer uppercase text-[8px] flex items-center gap-1 ${
+                engineMode === 'grid'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              ▦ Retícula
+            </button>
+          </div>
           
           {/* Selector de Niveles / Partes del juego (No wrapping scrollable row on mobile) */}
           <div className="bg-slate-950/80 border border-slate-800 p-0.5 rounded-lg flex items-center gap-1 font-mono text-[9px] shadow-inner flex-nowrap overflow-x-auto scrollbar-none max-w-full">
@@ -1658,17 +1746,24 @@ export default function App() {
             {/* Responsive Split Screen Layout: Left = Game Grid (with overlay on mobile), Right = Powers column (on desktop) */}
             <div className="w-full flex flex-col lg:flex-row gap-5 items-stretch justify-center relative">
               
-              {/* Left Column: Game Screen / Viewport & Mobile Float Overlays */}
+              {/* Left Column: Phaser 3 Canvas or Game Grid Viewport */}
               <div className="flex-1 w-full flex flex-col items-center justify-center relative max-w-[920px] mx-auto">
-                <GameGrid 
-                  grid={grid} 
-                  player={player} 
-                  enemies={enemies}
-                  floatingTexts={floatingTexts}
-                  onCellClick={handleGridCellClick}
-                  showVirtualControls={showVirtualControls}
-                  isSidebarLayout={isLargeScreen}
-                />
+                {engineMode === 'phaser' ? (
+                  <PhaserGameContainer 
+                    currentLevel={currentLevel}
+                    subMap={subMap}
+                  />
+                ) : (
+                  <GameGrid 
+                    grid={grid} 
+                    player={player} 
+                    enemies={enemies}
+                    floatingTexts={floatingTexts}
+                    onCellClick={handleGridCellClick}
+                    showVirtualControls={showVirtualControls}
+                    isSidebarLayout={isLargeScreen}
+                  />
+                )}
 
                 {/* Tactical controls container placed at the bottom space (No overlay over gameplay map view) */}
                 {!isLargeScreen && showVirtualControls && (

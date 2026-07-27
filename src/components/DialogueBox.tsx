@@ -9,6 +9,8 @@ interface DialogueBoxProps {
 }
 
 export const DialogueBox: React.FC<DialogueBoxProps> = ({ dialogue, onNext }) => {
+  if (!dialogue || !dialogue.text) return null;
+
   const [displayedText, setDisplayedText] = useState('');
   const [isFinished, setIsFinished] = useState(false);
 

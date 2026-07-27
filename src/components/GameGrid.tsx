@@ -6,6 +6,10 @@ import { getPasherTheme, getPasherCellClass } from '../utils/pasher';
 import { LuffySprite } from './LuffySprite';
 import { KobySprite } from './KobySprite';
 import { AlvidaSprite } from './AlvidaSprite';
+import { PirateSprite } from './PirateSprite';
+import { ZoroSprite } from './ZoroSprite';
+import { MarineSprite } from './MarineSprite';
+import { NpcSprite } from './NpcSprite';
 
 interface GameGridProps {
   grid: Cell[][];
@@ -917,26 +921,20 @@ export const GameGrid: React.FC<GameGridProps> = ({
                   <span className="text-lg opacity-60 select-none">🔓</span>
                 )}
 
-                {/* 3. Zoro tied / free representation */}
+                {/* 3. Zoro / Zack tied / free representation */}
                 {cell.type === 'zoro-chained' && (
-                  <div className="relative w-full h-full bg-slate-950/20 flex flex-col items-center justify-center border-2 border-dashed border-emerald-600/50 z-10">
-                    <span className="text-3xl animate-pulse filter saturate-100">🪵👦💚</span>
-                    <div className="absolute bottom-1 bg-slate-900/90 text-[7px] font-mono border border-emerald-500/50 text-emerald-400 font-extrabold px-1.5 py-0.5 rounded-full select-none flex items-center gap-0.5 scale-90 leading-none">
-                      ⛓️ ZORO PRESO
+                  <div className="relative w-full h-full flex flex-col items-center justify-center z-10">
+                    <ZoroSprite isChained={true} />
+                    <div className="absolute bottom-0 bg-emerald-950/90 border border-emerald-400 text-[6px] font-mono text-emerald-300 font-extrabold px-1 rounded-full scale-90 whitespace-nowrap leading-none z-15">
+                      ⛓️ ZACK ENCADENADO
                     </div>
                   </div>
                 )}
                 {cell.type === 'zoro-free' && (
-                  <div className="relative w-full h-full bg-emerald-950/20 flex flex-col items-center justify-center border-2 border-solid border-emerald-500/50 z-10">
-                    <motion.span 
-                      animate={{ y: [-1, 1, -1] }}
-                      transition={{ repeat: Infinity, duration: 1.5 }}
-                      className="text-2xl filter saturate-100"
-                    >
-                      💚⚔️
-                    </motion.span>
-                    <div className="absolute bottom-1 bg-slate-900/90 text-[7px] font-mono border border-emerald-400 text-emerald-300 font-extrabold px-1 py-0.5 rounded-full select-none flex items-center gap-0.5 scale-90 leading-none">
-                      ⚔️ ZORO SOCIO
+                  <div className="relative w-full h-full flex flex-col items-center justify-center z-10">
+                    <ZoroSprite isChained={false} />
+                    <div className="absolute bottom-0 bg-emerald-600/90 border border-emerald-300 text-[6px] font-mono text-white font-extrabold px-1 rounded-full scale-90 whitespace-nowrap leading-none z-15">
+                      ⚔️ ZACK SOCIO
                     </div>
                   </div>
                 )}
@@ -957,6 +955,121 @@ export const GameGrid: React.FC<GameGridProps> = ({
                         <span className="text-sm leading-none mt-1">🚧</span>
                       </div>
                     )}
+                  </div>
+                )}
+
+                {/* 5. Zelda Minish Cap House Roof Tile */}
+                {cell.type === 'house-roof' && (
+                  <div className="relative w-full h-full bg-gradient-to-b from-red-700 via-red-800 to-rose-950 flex flex-col items-center justify-center border border-red-950 z-10 shadow-md">
+                    <div className="w-full h-1 bg-amber-500/80" />
+                    <span className="text-sm leading-none drop-shadow">🏠</span>
+                    <span className="text-[5px] font-mono font-black text-red-200 uppercase tracking-tighter bg-red-950/80 px-0.5 rounded scale-90">CASA</span>
+                  </div>
+                )}
+
+                {/* 6. Interactive House Door */}
+                {cell.type === 'house-door' && (
+                  <div className="relative w-full h-full bg-amber-950 border-2 border-amber-800 flex flex-col items-center justify-center z-10 cursor-pointer hover:brightness-125 transition-all">
+                    <span className="text-sm leading-none animate-pulse">🚪</span>
+                    <span className="text-[5.5px] font-mono font-black text-yellow-300 bg-slate-950/90 px-0.5 rounded border border-yellow-500/40 uppercase">ENTRAR</span>
+                  </div>
+                )}
+
+                {/* 7. Minish Cap Flowers */}
+                {cell.type === 'flower' && (
+                  <div className="relative w-full h-full flex items-center justify-center pointer-events-none z-10">
+                    <motion.span 
+                      animate={{ scale: [0.9, 1.1, 0.9], rotate: [-4, 4, -4] }}
+                      transition={{ repeat: Infinity, duration: 2 }}
+                      className="text-sm filter drop-shadow"
+                    >
+                      🌸
+                    </motion.span>
+                  </div>
+                )}
+
+                {/* 8. NPC Nina (Rice Ball Girl) */}
+                {cell.type === 'npc-nina' && (
+                  <div className="relative w-full h-full flex flex-col items-center justify-center z-10">
+                    <NpcSprite type="nina" />
+                    <div className="absolute -top-1.5 -right-1 text-[9px] leading-none animate-bounce">💬</div>
+                    <div className="absolute bottom-0 bg-pink-600/90 border border-pink-300 text-[5.5px] font-mono text-white font-black px-1 rounded-full scale-90 leading-none z-15">
+                      NINA 🍙
+                    </div>
+                  </div>
+                )}
+
+                {/* 9. NPC Villager */}
+                {cell.type === 'npc-villager' && (
+                  <div className="relative w-full h-full flex flex-col items-center justify-center z-10">
+                    <NpcSprite type="villager" />
+                    <div className="absolute -top-1.5 -right-1 text-[9px] leading-none animate-bounce">💬</div>
+                    <div className="absolute bottom-0 bg-emerald-700/90 border border-emerald-300 text-[5.5px] font-mono text-white font-black px-1 rounded-full scale-90 leading-none z-15">
+                      ALDEANO
+                    </div>
+                  </div>
+                )}
+
+                {/* 10. Minish Cap Pressure Plate Switches */}
+                {cell.type === 'switch-off' && (
+                  <div className="relative w-full h-full bg-slate-800 border-2 border-slate-600 rounded flex flex-col items-center justify-center z-10 shadow-inner">
+                    <div className="w-5 h-5 bg-amber-600 border border-amber-400 rounded-full flex items-center justify-center shadow-md animate-pulse">
+                      <span className="text-[7px] text-amber-200 font-mono font-black">🔘</span>
+                    </div>
+                    <span className="text-[5px] text-amber-300 font-mono font-black uppercase tracking-tighter leading-none mt-0.5">BOTÓN</span>
+                  </div>
+                )}
+
+                {cell.type === 'switch-on' && (
+                  <div className="relative w-full h-full bg-emerald-900 border-2 border-emerald-500 rounded flex flex-col items-center justify-center z-10 shadow-[0_0_12px_rgba(16,185,129,0.8)]">
+                    <div className="w-5 h-5 bg-emerald-400 border border-white rounded-full flex items-center justify-center scale-90 shadow-md">
+                      <span className="text-[7px] text-emerald-950 font-mono font-black">✔</span>
+                    </div>
+                    <span className="text-[5px] text-emerald-300 font-mono font-black uppercase tracking-tighter leading-none mt-0.5">ACTIVADO</span>
+                  </div>
+                )}
+
+                {/* 11. Minish Cap Clay Pots */}
+                {cell.type === 'pot' && (
+                  <div className="relative w-full h-full flex flex-col items-center justify-center z-10 cursor-pointer hover:brightness-125 transition-all">
+                    <span className="text-base filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">🏺</span>
+                    <span className="text-[5px] font-mono font-black text-amber-300 bg-slate-950/80 px-0.5 rounded border border-amber-600/50 scale-85 uppercase">VASIJA</span>
+                  </div>
+                )}
+
+                {cell.type === 'pot-broken' && (
+                  <div className="relative w-full h-full flex items-center justify-center z-10 opacity-70 scale-90">
+                    <span className="text-xs filter drop-shadow">🧱</span>
+                  </div>
+                )}
+
+                {/* 12. Animated Wall Torches */}
+                {cell.type === 'torch' && (
+                  <div className="relative w-full h-full bg-slate-900 border border-slate-750 rounded flex flex-col items-center justify-center z-10 shadow-inner">
+                    <motion.span 
+                      animate={{ scale: [1, 1.25, 1], opacity: [0.8, 1, 0.8] }}
+                      transition={{ repeat: Infinity, duration: 0.8 }}
+                      className="text-base filter drop-shadow-[0_0_8px_rgba(245,158,11,0.9)]"
+                    >
+                      🔥
+                    </motion.span>
+                    <span className="text-[5px] text-amber-400 font-mono font-black tracking-tighter uppercase leading-none">ANTORCHA</span>
+                  </div>
+                )}
+
+                {/* 13. Wooden Bridge Planks */}
+                {cell.type === 'bridge' && (
+                  <div className="relative w-full h-full bg-[#855529] border-y-2 border-[#4d2f13] flex items-center justify-center z-10 shadow-md">
+                    <div className="w-full h-0.5 bg-[#4d2f13]/60 my-0.5" />
+                    <span className="text-[6px] font-mono font-bold text-amber-200 uppercase tracking-widest opacity-60">PUENTE</span>
+                  </div>
+                )}
+
+                {/* 14. Minish Cap White Stone Fortress Wall */}
+                {cell.type === 'wall-stone' && (
+                  <div className="relative w-full h-full bg-slate-200 border-2 border-slate-400 flex flex-col items-center justify-center z-10 shadow-md">
+                    <div className="w-full h-1 bg-slate-400/80" />
+                    <span className="text-[5.5px] font-mono font-black text-slate-800 uppercase tracking-widest">MURO</span>
                   </div>
                 )}
 
@@ -984,57 +1097,9 @@ export const GameGrid: React.FC<GameGridProps> = ({
         )}
       </div>
 
-      {/* Visual coordinates dotted trails representing Level 1 walkthrough paths */}
-      {currentLevel === 1 && (
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" style={{ mixBlendMode: 'screen' }}>
-          {/* Path 1: From Luffy to Koby */}
-          <motion.path
-            d="M 9.375% 45.817% L 21.875% 45.817% L 21.875% 29.157% L 46.875% 29.157% L 46.875% 37.487%"
-            fill="none"
-            stroke="rgba(255, 255, 255, 0.4)"
-            strokeWidth="2.5"
-            strokeDasharray="5,5"
-            animate={{ strokeDashoffset: [0, -20] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 1.5 }}
-          />
-          {/* Path 2: From Koby to Alvida's cells */}
-          <motion.path
-            d="M 46.875% 37.487% L 46.875% 70.807% L 65.625% 70.807% L 65.625% 29.157% L 78.125% 29.157%"
-            fill="none"
-            stroke="rgba(255, 255, 255, 0.4)"
-            strokeWidth="2.5"
-            strokeDasharray="5,5"
-            animate={{ strokeDashoffset: [0, -20] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 1.5 }}
-          />
-          
-          {/* Small animated target/star badges on key waypoints like (3,3) and (10,3) */}
-          <circle cx="21.875%" cy="29.157%" r="4" fill="#f59e0b" className="animate-ping" />
-          <circle cx="21.875%" cy="29.157%" r="2" fill="#fbbf24" />
-          
-          <circle cx="65.625%" cy="29.157%" r="4" fill="#f59e0b" className="animate-ping" />
-          <circle cx="65.625%" cy="29.157%" r="2" fill="#fbbf24" />
-        </svg>
-      )}
 
-      {/* Koby dynamic scared visual effect if at coordinate (7,4) */}
-      <AnimatePresence>
-        {grid[4] && grid[4][7] && grid[4][7].type === 'koby-scared' && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute z-20 pointer-events-none flex flex-col items-center justify-center animate-pulse"
-            style={{
-              left: `${7 * 6.25}%`,
-              top: `${4 * 8.33 - 1.5}%`,
-              width: '6.25%',
-              height: '8.33%',
-            }}
-          >
-            <span className="text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">😭👓💬</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+
 
       {/* Draw Patrolling Enemies */}
       {enemies.map((enemy) => {
@@ -1133,6 +1198,10 @@ export const GameGrid: React.FC<GameGridProps> = ({
             } ${enemy.state === 'chasing' ? 'border-orange-500 border-dashed ring-2 ring-orange-500' : ''}`}>
               {enemy.type === 'alvida' ? (
                 <AlvidaSprite state={enemy.state} direction={enemy.direction || 'down'} hp={enemy.hp} />
+              ) : enemy.type === 'pirate' || enemy.type === 'pirate-officer' ? (
+                <PirateSprite type={enemy.type} state={enemy.state} direction={enemy.direction || 'down'} />
+              ) : enemy.type === 'marine' || enemy.type === 'helmeppo' || enemy.type === 'morgan' ? (
+                <MarineSprite type={enemy.type} state={enemy.state} direction={enemy.direction || 'down'} hp={enemy.hp} />
               ) : (
                 sprite
               )}

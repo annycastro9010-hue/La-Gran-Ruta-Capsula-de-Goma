@@ -61,7 +61,7 @@ export const KobySprite: React.FC<KobySpriteProps> = ({ isScared }) => {
         xmlns="http://www.w3.org/2000/svg"
       >
         {/* Shadow floor base */}
-        <ellipse cx="12" cy="22" rx="4.5" ry="1.5" fill="#000" opacity="0.32" />
+        <rect x="7.5" y="21" width="9" height="2" rx="1" fill="#000" opacity="0.32" />
 
         <g style={{ transform: `translate(${dx}px, ${dy}px)`, transformOrigin: '12px 22px' }}>
           
