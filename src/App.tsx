@@ -90,8 +90,8 @@ export default function App() {
   const [status, setStatus] = useState<GameStatus>('playing');
   const [engineMode, setEngineMode] = useState<'phaser' | 'grid'>('grid');
   const [subMap, setSubMap] = useState<string>('main');
-  const [grid, setGrid] = useState<Cell[][]>([]);
-  const [enemies, setEnemies] = useState<Enemy[]>([]);
+  const [grid, setGrid] = useState<Cell[][]>(() => buildInitialGrid(1));
+  const [enemies, setEnemies] = useState<Enemy[]>(() => getInitialEnemies(1));
   const [player, setPlayer] = useState<PlayerState>({
     x: 1,
     y: 5, // Starts inside the barrel at (1, 5)
@@ -1784,139 +1784,17 @@ export default function App() {
                   />
                 )}
 
-                {/* Tactical controls container placed at the bottom space (No overlay over gameplay map view) */}
+                {/* Tactical controls container: Uses ControlsOverlay for clear key bindings and attack descriptions */}
                 {!isLargeScreen && showVirtualControls && (
-                  <div className="w-full flex flex-row items-center justify-around gap-4 mt-4 px-3 py-3 bg-slate-900 border-2 border-slate-800 rounded-2xl max-w-[500px] mx-auto select-none pointer-events-auto shadow-2xl shadow-black/90">
-                    
-                    {/* Left side: Tactile high-contrast retro D-Pad */}
-                    <div className="bg-slate-905 border border-slate-700/60 p-1.5 rounded-full select-none flex items-center justify-center pointer-events-auto scale-90 sm:scale-100 shadow-md">
-                      <div className="relative w-28 h-28 flex items-center justify-center">
-                        {/* Center core cross */}
-                        <div className="absolute w-9 h-28 bg-slate-850 rounded-lg border border-slate-700 shadow-inner" />
-                        <div className="absolute h-9 w-28 bg-slate-850 rounded-lg border border-slate-700 shadow-inner" />
-                        <div className="absolute w-9 h-9 bg-slate-950 rounded-full z-10 border border-slate-700/80 shadow-md flex items-center justify-center text-slate-300 text-[10px] font-bold">⚓</div>
-
-                        {/* UP ARROW BUTTON */}
-                        <button
-                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); movePlayer('up'); }}
-                          onClick={() => movePlayer('up')}
-                          className="absolute top-0 w-9.5 h-9.5 flex flex-col items-center justify-center rounded-t-lg bg-slate-705 border-b border-slate-600 active:bg-amber-500 active:border-amber-400 text-amber-550 active:text-white active:scale-95 z-20 transition-all cursor-pointer shadow-md"
-                          title="Arriba"
-                        >
-                          <ArrowUp className="w-4 h-4 text-amber-500 active:text-white" />
-                        </button>
-
-                        {/* DOWN ARROW BUTTON */}
-                        <button
-                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); movePlayer('down'); }}
-                          onClick={() => movePlayer('down')}
-                          className="absolute bottom-0 w-9.5 h-9.5 flex flex-col items-center justify-center rounded-b-lg bg-slate-705 border-t border-slate-600 active:bg-amber-550 active:border-amber-405 text-amber-550 active:text-white active:scale-95 z-20 transition-all cursor-pointer shadow-md"
-                          title="Abajo"
-                        >
-                          <ArrowDown className="w-4 h-4 text-amber-500 active:text-white" />
-                        </button>
-
-                        {/* LEFT ARROW BUTTON */}
-                        <button
-                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); movePlayer('left'); }}
-                          onClick={() => movePlayer('left')}
-                          className="absolute left-0 w-9.5 h-9.5 flex items-center justify-center rounded-l-lg bg-slate-705 border-r border-slate-600 active:bg-amber-500 active:border-amber-400 text-amber-550 active:text-white active:scale-95 z-20 transition-all cursor-pointer shadow-md"
-                          title="Izquierda"
-                        >
-                          <ArrowLeft className="w-4 h-4 text-amber-500 active:text-white" />
-                        </button>
-
-                        {/* RIGHT ARROW BUTTON */}
-                        <button
-                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); movePlayer('right'); }}
-                          onClick={() => movePlayer('right')}
-                          className="absolute right-0 w-9.5 h-9.5 flex items-center justify-center rounded-r-lg bg-slate-705 border-l border-slate-600 active:bg-amber-500 active:border-amber-450 text-amber-550 active:text-white active:scale-95 z-20 transition-all cursor-pointer shadow-md"
-                          title="Derecha"
-                        >
-                          <ArrowRight className="w-4 h-4 text-amber-500 active:text-white" />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Right side: Vibrant High-contrast Skills Round Console */}
-                    <div className="select-none pointer-events-auto bg-slate-905 border border-slate-700/60 rounded-full p-1 flex items-center justify-center w-[136px] h-[136px] sm:w-[150px] sm:h-[150px] shadow-md">
-                      <div className="relative w-28 h-28 sm:w-36 sm:h-36 scale-90 sm:scale-100 flex items-center justify-center">
-                        
-                        {/* Main Attack (GUM-GUM PISTOL) - Large Red Button at the center bottom/right */}
-                        <button
-                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); executeAttack('pistol'); }}
-                          onClick={() => executeAttack('pistol')}
-                          className="absolute bottom-0 right-0 w-11 h-11 sm:w-14 sm:h-14 bg-gradient-to-b from-red-600 to-red-750 hover:from-red-500 hover:to-red-600 border border-red-450 rounded-full flex flex-col items-center justify-center text-white active:scale-95 shadow-md focus:outline-none z-20 transition-all cursor-pointer active:brightness-125"
-                          title="Pistola Gum-Gum (Básico)"
-                        >
-                          <span className="text-sm sm:text-xl">👊</span>
-                          <span className="text-[6.5px] sm:text-[7.5px] font-mono font-black tracking-tighter uppercase text-yellow-300">PISTOLA</span>
-                        </button>
-
-                        {/* Giro Evasivo (Dash/Slide) - Teal Button bottom left */}
-                        <button
-                          onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); makeRoll(); }}
-                          onClick={() => makeRoll()}
-                          className="absolute bottom-0 left-2 w-9 h-9 sm:w-11 sm:h-11 bg-teal-600 hover:bg-teal-500 border border-teal-400 rounded-full flex flex-col items-center justify-center text-white active:scale-95 shadow-md focus:outline-none z-10 transition-all cursor-pointer active:brightness-125"
-                          title="Giro Evasivo"
-                        >
-                          <span className="text-xs sm:text-base text-teal-100">🌀</span>
-                          <span className="text-[6.5px] sm:text-[7.5px] font-mono font-black tracking-tighter uppercase text-teal-200 leading-none">GIRO</span>
-                        </button>
-
-                        {/* Gum-Gum Metralleta (Requires Haki 10) - Yellow Button mid left */}
-                        <button
-                          onTouchStart={(e) => { if (player.haki >= 10) { e.preventDefault(); e.stopPropagation(); executeAttack('gatling'); } }}
-                          onClick={() => executeAttack('gatling')}
-                          disabled={player.haki < 10}
-                          className={`absolute top-1 sm:top-4 left-0 w-9 h-9 sm:w-11 sm:h-11 border rounded-full flex flex-col items-center justify-center active:scale-95 shadow-md focus:outline-none z-10 transition-all cursor-pointer ${
-                            player.haki >= 10
-                              ? 'bg-amber-500 border-yellow-300 active:bg-amber-400 text-slate-950 font-black hover:brightness-110'
-                              : 'bg-slate-955 border-slate-800 text-slate-600 opacity-40 cursor-not-allowed'
-                          }`}
-                          title="Metralleta (10 Haki)"
-                        >
-                          <span className="text-xs sm:text-base">💥</span>
-                          <span className="text-[6.5px] sm:text-[7.5px] font-mono font-black tracking-tighter uppercase leading-none">METRAL</span>
-                        </button>
-
-                        {/* Gum-Gum Látigo (Requires Haki 15) - Purple Button top right */}
-                        <button
-                          onTouchStart={(e) => { if (player.haki >= 15) { e.preventDefault(); e.stopPropagation(); executeAttack('whip'); } }}
-                          onClick={() => executeAttack('whip')}
-                          disabled={player.haki < 15}
-                          className={`absolute top-0 right-1 sm:right-4 w-9 h-9 sm:w-11 sm:h-11 border rounded-full flex flex-col items-center justify-center active:scale-95 shadow-md focus:outline-none z-10 transition-all cursor-pointer ${
-                            player.haki >= 15
-                              ? 'bg-purple-600 border-purple-400 active:bg-purple-500 text-purple-100 font-extrabold hover:brightness-110'
-                              : 'bg-slate-955 border-slate-800 text-slate-600 opacity-45 cursor-not-allowed'
-                          }`}
-                          title="Látigo (15 Haki)"
-                        >
-                          <span className="text-xs sm:text-base">🌪️</span>
-                          <span className="text-[6.5px] sm:text-[7.5px] font-mono font-black tracking-tighter uppercase leading-none">LÁTIGO</span>
-                        </button>
-
-                        {/* Eat Meat / Carne (Quick Heal) - Coral Button offset top center */}
-                        <button
-                          onTouchStart={(e) => { if (player.meatCount > 0) { e.preventDefault(); e.stopPropagation(); eatMeat(); } }}
-                          onClick={() => eatMeat()}
-                          disabled={player.meatCount === 0}
-                          className={`absolute top-[-8px] sm:top-[-5px] left-[32px] sm:left-[42px] w-8.5 h-8.5 sm:w-10 sm:h-10 border rounded-full flex flex-col items-center justify-center active:scale-95 shadow-md focus:outline-none z-15 transition-all cursor-pointer ${
-                            player.meatCount > 0
-                              ? 'bg-rose-500 border-rose-350 text-rose-50 hover:brightness-110 active:bg-rose-400'
-                              : 'bg-slate-955 border-slate-800 text-slate-600 opacity-40 cursor-not-allowed'
-                          }`}
-                          title="Comer Carne (Cura HP)"
-                        >
-                          <span className="text-xs sm:text-sm">🍖</span>
-                          <span className="text-[6.5px] sm:text-[8px] font-black leading-none bg-rose-955 border border-rose-500 px-0.8 py-0.2 rounded-full absolute -top-1 -right-1 text-rose-350 shrink-0">
-                            {player.meatCount}
-                          </span>
-                        </button>
-                        
-                      </div>
-                    </div>
-
+                  <div className="w-full mt-2 max-w-[500px] mx-auto select-none pointer-events-auto">
+                    <ControlsOverlay 
+                      onMove={movePlayer} 
+                      onAttack={executeAttack} 
+                      onRoll={makeRoll} 
+                      onEatMeat={eatMeat} 
+                      meatCount={player.meatCount}
+                      haki={player.haki}
+                    />
                   </div>
                 )}
               </div>
