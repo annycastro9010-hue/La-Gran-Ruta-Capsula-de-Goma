@@ -25,11 +25,11 @@ import { GameGrid } from './components/GameGrid';
 import { GameHUD } from './components/GameHUD';
 import { DialogueBox } from './components/DialogueBox';
 import { ControlsOverlay } from './components/ControlsOverlay';
-import { playSound } from './utils/sound';
+import { playSound, playAmbientMusic, stopAmbientMusic, getAmbientZoneForLevel } from './utils/sound';
 import { getPasherTheme } from './utils/pasher';
 import { PhaserGameContainer } from './game/PhaserGameContainer';
 import { Volume2, Trophy, RefreshCw, Flame, Navigation, Key, HelpCircle, Swords, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 
 export default function App() {
   // Game running state
@@ -70,6 +70,23 @@ export default function App() {
       return () => window.removeEventListener('resize', handleResize);
     }
   }, []);
+  // Ambient music: starts/changes when level changes, user must interact first
+  useEffect(() => {
+    const zone = getAmbientZoneForLevel(currentLevel);
+    // Music only starts after first user interaction (browser policy)
+    const startMusic = () => {
+      playAmbientMusic(zone);
+      document.removeEventListener('click', startMusic);
+      document.removeEventListener('keydown', startMusic);
+    };
+    document.addEventListener('click', startMusic);
+    document.addEventListener('keydown', startMusic);
+    return () => {
+      document.removeEventListener('click', startMusic);
+      document.removeEventListener('keydown', startMusic);
+    };
+  }, [currentLevel]);
+
   const [status, setStatus] = useState<GameStatus>('playing');
   const [engineMode, setEngineMode] = useState<'phaser' | 'grid'>('grid');
   const [subMap, setSubMap] = useState<string>('main');
@@ -128,8 +145,9 @@ export default function App() {
     }, 1500);
   }, []);
 
-  // Initialize/Reset Level State
+  // Initialize/Reset Level State — keeps playing status so grid never unmounts
   const handleResetLevel = useCallback(() => {
+    stopAmbientMusic();
     setCurrentLevel(1);
     setGrid(buildInitialGrid(1));
     setEnemies(getInitialEnemies(1));
@@ -163,7 +181,8 @@ export default function App() {
       currentIndex: 0,
       triggerType: 'intro'
     });
-    setStatus('intro');
+    // CRITICAL: keep status = 'playing' so GameGrid never unmounts
+    setStatus('playing');
     playSound('unlock');
   }, []);
 
@@ -1732,8 +1751,8 @@ export default function App() {
           </motion.div>
         )}
 
-        {/* State B: Active Gameplay Viewport */}
-        {(status === 'playing' || (status === 'intro' && dialogueSeq.triggerType !== null)) && (
+        {/* State B: Active Gameplay Viewport — always shown when grid is loaded */}
+        {(status === 'playing' || status === 'gameover' || status === 'victory' || (status === 'intro' && dialogueSeq.triggerType !== null)) && (
           <div className="w-full flex flex-col gap-4">
             {/* Primary HUD bar showing hearts, keys and stats */}
             <GameHUD 
@@ -2033,35 +2052,35 @@ export default function App() {
           </div>
         )}
 
-        {/* State C: Game Over display screen */}
+        {/* State C: Game Over — floating overlay, does NOT unmount gameplay */}
         {status === 'gameover' && (
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-sm bg-slate-900 border-4 border-rose-650 p-6 rounded-2xl text-center shadow-2xl"
-          >
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-rose-950 border-2 border-rose-500 flex items-center justify-center text-4xl mb-3 shadow-[0_0_15px_rgba(244,63,94,0.4)]">
-              💀
-            </div>
-            <h2 className="text-xl font-mono font-black text-rose-500 tracking-wider uppercase mb-1">
-              ¡HAS SIDO DERROTADO!
-            </h2>
-            <div className="text-slate-400 font-mono text-[10px] tracking-widest uppercase mb-4">Luffy se desmayó por el hambre y cansancio...</div>
-            
-            <p className="text-xs text-slate-300 font-sans leading-relaxed text-center mb-5">
-              "¡¿Quién es la mujer más hermosa de todos los mares y quién te dio permiso para dormir en mi precioso barco?!" - Capitana Alvida
-            </p>
-
-            <button
-              onClick={handleResetLevel}
-              className="w-full py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-705 border border-slate-600 text-white uppercase font-mono font-black text-xs tracking-widest shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              className="w-full max-w-sm bg-slate-900 border-4 border-rose-600 p-6 rounded-2xl text-center shadow-2xl mx-4"
             >
-              <RefreshCw className="w-4 h-4 animate-spin-subtle" /> Intentarlo de Nuevo
-            </button>
-          </motion.div>
+              <div className="w-20 h-20 mx-auto rounded-3xl bg-rose-950 border-2 border-rose-500 flex items-center justify-center text-4xl mb-3 shadow-[0_0_15px_rgba(244,63,94,0.4)]">
+                💀
+              </div>
+              <h2 className="text-xl font-mono font-black text-rose-500 tracking-wider uppercase mb-1">
+                ¡HAS SIDO DERROTADO!
+              </h2>
+              <div className="text-slate-400 font-mono text-[10px] tracking-widest uppercase mb-4">Luffy se desmayó por el hambre y cansancio...</div>
+              <p className="text-xs text-slate-300 font-sans leading-relaxed text-center mb-5">
+                "¡¿Quién es la mujer más hermosa de todos los mares y quién te dio permiso para dormir en mi precioso barco?!" - Capitana Alvida
+              </p>
+              <button
+                onClick={handleResetLevel}
+                className="w-full py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white uppercase font-mono font-black text-xs tracking-widest shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <RefreshCw className="w-4 h-4" /> Intentarlo de Nuevo
+              </button>
+            </motion.div>
+          </div>
         )}
 
-        {/* State D: Level Completed Victory Screen */}
+        {/* State D: Level Completed Victory — floating overlay */}
         {status === 'victory' && (
           <motion.div 
             initial={{ opacity: 0, scale: 0.92 }}
@@ -2109,15 +2128,13 @@ export default function App() {
           </motion.div>
         )}
 
-        {/* Dialog system popup box */}
-        <AnimatePresence>
-          {dialogueSeq.triggerType !== null && (
-            <DialogueBox 
-              dialogue={dialogueSeq.dialogues[dialogueSeq.currentIndex]} 
-              onNext={handleNextDialogue} 
-            />
-          )}
-        </AnimatePresence>
+        {/* Dialog system — fixed overlay, renders on top of everything */}
+        {dialogueSeq.triggerType !== null && dialogueSeq.dialogues[dialogueSeq.currentIndex] && (
+          <DialogueBox 
+            dialogue={dialogueSeq.dialogues[dialogueSeq.currentIndex]} 
+            onNext={handleNextDialogue} 
+          />
+        )}
       </main>
 
       {/* Retro Footer bar explaining controls and capabilities */}
