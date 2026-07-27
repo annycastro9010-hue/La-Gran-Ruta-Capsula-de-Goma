@@ -1751,8 +1751,8 @@ export default function App() {
           </motion.div>
         )}
 
-        {/* State B: Active Gameplay Viewport — always shown when grid is loaded */}
-        {(status === 'playing' || status === 'gameover' || status === 'victory' || (status === 'intro' && dialogueSeq.triggerType !== null)) && (
+        {/* State B: Active Gameplay Viewport — ALWAYS visible when grid is loaded */}
+        {grid.length > 0 && (
           <div className="w-full flex flex-col gap-4">
             {/* Primary HUD bar showing hearts, keys and stats */}
             <GameHUD 

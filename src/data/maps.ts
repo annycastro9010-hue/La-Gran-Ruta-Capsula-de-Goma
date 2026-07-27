@@ -667,39 +667,33 @@ export const INTRO_DIALOGUES: DialogueSequence = {
   dialogues: [
     {
       id: 'd1',
-      speaker: 'Pirate',
-      avatar: ' Pirata dócil',
-      text: '¡Oigan, miren este enorme barril que sacamos del mar! ¡Seguro que está lleno de delicioso vino de sake!',
+      speaker: 'Koby',
+      avatar: ' Koby asustado',
+      text: '¡¡Un chico salió del barril!! ¡¿Quién eres?! ¡Si Alvida-sama te encuentra, nos aplasta a los dos con su maza!',
     },
     {
       id: 'd2',
-      speaker: 'Koby',
-      avatar: ' Koby asustado',
-      text: 'O-oh, chicos... l-les sugiero no abrirlo aquí en la bodega. Si Alvida-sama se entera, nos aplastará con su enorme maza de hierro...',
+      speaker: 'Luffy',
+      avatar: ' Luffy Strawhat',
+      text: '¡Soy Monkey D. Luffy, el futuro REY DE LOS PIRATAS! ¡Shishishi! Oye... ¿tienes carne?',
     },
     {
       id: 'd3',
-      speaker: 'Luffy',
-      avatar: ' Luffy saliendo',
-      text: '¡¡GUM-GUM PISTO... POP!! ¡VAYA! ¡Qué gran siesta dormí! ¡Casi me ahogo en ese remolino de agua!',
+      speaker: 'Koby',
+      avatar: ' Koby llorando',
+      text: '¡Nooo! Luffy-san, ¡escúchame! 💡 PISTA: Hay GUARDIAS patrullando el sótano. Usa ESPACIO o el botón 👊 PISTOLA para golpearlos.',
     },
     {
       id: 'd4',
       speaker: 'Koby',
-      avatar: ' Koby horrorizado',
-      text: '¡¡¿Q-QUÉ?!! ¡¿Salió un chico con sombrero de paja de adentro del barril?! ¡¿Quién eres tú?!',
+      avatar: ' Koby señalando',
+      text: '💡 PISTA: El portón de hierro está BLOQUEADO. La LLAVE está en el COFRE 🟡 en la esquina inferior derecha: posición (13, 8). ¡Ve por ella!',
     },
     {
       id: 'd5',
       speaker: 'Luffy',
-      avatar: ' Luffy Strawhat',
-      text: '¡Hola! Soy Monkey D. Luffy, ¡el hombre que se convertirá en el REY de los PIRATAS! ¡Shishishi! ¡Tengo hambre!',
-    },
-    {
-      id: 'd6',
-      speaker: 'Luffy',
-      avatar: ' Luffy',
-      text: '¡Empecemos nuestra fuga! Derrotemos a los guardias en este sótano, busquemos la llave del portón y subamos las escaleras en (13, 2).',
+      avatar: ' Luffy feliz',
+      text: '¡Entendido! ➡️ PLAN: 1) Derrota guardias. 2) Busca el cofre en (13,8). 3) La llave abre el portón. 4) Sube las ESCALERAS en (13,2). ¡Fuga exitosa!',
     },
   ],
 };
@@ -711,28 +705,29 @@ export const ZORO_MEET_DIALOGUES: DialogueSequence = {
       id: 'zm1',
       speaker: 'Koby',
       avatar: ' Koby',
-      text: '¡L-Luffy-san! ¡Por favor ten cuidado! Este es el Sótano de Suministros. Arriba está la cubierta donde ronda la capitana Alvida.',
+      text: '¡Luffy-san! ¡Encontraste el sótano donde me obligó a trabajar Alvida! Llevo años aquí como su cocinero esclavo...',
     },
     {
       id: 'zm2',
       speaker: 'Luffy',
-      avatar: ' Luffy',
-      text: '¿Eh? ¿Quién es Alvida? ¿Me dará carne?',
+      avatar: ' Luffy alegre',
+      text: '¡Pues ya se acabó! ¡Vienes conmigo, Koby! ¡Nos escapamos juntos de esta vieja gorda!',
     },
     {
       id: 'zm3',
       speaker: 'Koby',
-      avatar: ' Koby llorando',
-      text: '¡¡NO!! ¡Es una tirana implacable! Yo era un simple pescador y me obligó a ser su navegante esclavo. ¡Quiero unirme a la Marina!',
+      avatar: ' Koby esperanzado',
+      text: '💡 PISTA: Para escapar necesitas: ① La LLAVE 🔑 del cofre en la esquina (13, 8) para abrir el portón de rejas. ② Sube las ESCALERAS 🪜 en (13, 2). ③ ¡Derrota a Alvida arriba!',
     },
     {
       id: 'zm4',
       speaker: 'Luffy',
-      avatar: ' Luffy alegre',
-      text: '¡Qué bien! ¡Entonces te ayudaré a escapar! Pero primero busquemos la LLAVE del portón en (13, 8) para subir las escaleras.',
+      avatar: ' Luffy puño',
+      text: '¡Fácil! ¡Mueve con WASD o las flechas del teclado! ¡Ataca con ESPACIO! ¡Come carne 🍖 con la tecla Q para curar vida! ¡Vamos Koby!',
     },
   ],
 };
+
 
 // Dialogue triggered when arriving on Level 2 (Pueblo Shellport)
 export const DECK_TRANSITION_DIALOGUES: DialogueSequence = {
