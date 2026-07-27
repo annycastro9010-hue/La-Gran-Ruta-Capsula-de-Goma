@@ -25,6 +25,7 @@ import { GameGrid } from './components/GameGrid';
 import { GameHUD } from './components/GameHUD';
 import { DialogueBox } from './components/DialogueBox';
 import { ControlsOverlay } from './components/ControlsOverlay';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { playSound, playAmbientMusic, stopAmbientMusic, getAmbientZoneForLevel } from './utils/sound';
 import { getPasherTheme } from './utils/pasher';
 import { PhaserGameContainer } from './game/PhaserGameContainer';
@@ -1533,7 +1534,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-slate-950 text-slate-100 flex flex-col justify-start md:justify-between font-sans relative overflow-x-hidden antialiased">
+    <ErrorBoundary>
+      <div className="min-h-screen w-full bg-slate-950 text-slate-100 flex flex-col justify-start md:justify-between font-sans relative overflow-x-hidden antialiased">
       {/* Visual background sea pattern decoration */}
       <div className="absolute inset-x-0 bottom-0 top-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#1e3a8a_2px,transparent_2px)] [background-size:16px_16px]" />
 
@@ -2151,5 +2153,6 @@ export default function App() {
         <p>One Piece Dungeon RPG • Hecho en GBA Pixel Style Studio • Presiona R o Haz Click para Curar HP</p>
       </footer>
     </div>
+    </ErrorBoundary>
   );
 }

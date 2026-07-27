@@ -286,11 +286,14 @@ export const GameGrid: React.FC<GameGridProps> = ({
                       delay: idx * 0.03
                     }}
                   >
-                    <circle
-                      cx={punchEndLeft}
-                      cy={punchEndTop}
-                      r="15"
+                    <rect
+                      x={punchEndLeft}
+                      y={punchEndTop}
+                      width="30"
+                      height="30"
+                      rx="15"
                       fill={idx % 2 === 0 ? "url(#fistGlowRed)" : "url(#fistGlowYellow)"}
+                      style={{ transform: 'translate(-15px, -15px)' }}
                     />
                     <text
                       x={punchEndLeft}
@@ -360,38 +363,18 @@ export const GameGrid: React.FC<GameGridProps> = ({
         {/* 1. DUST IMPACT PUFF RINGS ON FRAME 3 (RETRACCION / IMPACT PUFFS) */}
         {attackFrame === 3 && (
           <g id="impact-dust-puffs">
-            <motion.circle
-              cx={`${x2}%`}
-              cy={`${y2}%`}
-              initial={{ r: 5, strokeWidth: 6, opacity: 0.9 }}
-              animate={{ r: 28, strokeWidth: 0.2, opacity: 0 }}
+            <motion.rect
+              x={`${x2 - 3}%`}
+              y={`${y2 - 3}%`}
+              width="6%"
+              height="6%"
+              rx="50%"
+              initial={{ scale: 0.5, opacity: 0.9 }}
+              animate={{ scale: 3, opacity: 0 }}
               transition={{ duration: 0.32, ease: "easeOut" }}
               stroke="#f1f5f9"
               fill="none"
             />
-            <motion.circle
-              cx={`${x2}%`}
-              cy={`${y2}%`}
-              initial={{ r: 2, strokeWidth: 4, opacity: 0.8 }}
-              animate={{ r: 18, strokeWidth: 0.1, opacity: 0 }}
-              transition={{ duration: 0.26, ease: "easeOut", delay: 0.05 }}
-              stroke="#cbd5e1"
-              fill="none"
-            />
-            {/* Multi-directional GBA pixel dust clouds */}
-            {[-12, 12].map((ox) =>
-              [-12, 12].map((oy) => (
-                <motion.circle
-                  key={`${ox}-${oy}`}
-                  cx={`${x2 + ox * 0.3}%`}
-                  cy={`${y2 + oy * 0.3}%`}
-                  initial={{ r: 2, opacity: 0.9 }}
-                  animate={{ cx: `${x2 + ox * 0.9}%`, cy: `${y2 + oy * 0.9}%`, r: 6, opacity: 0 }}
-                  transition={{ duration: 0.28, ease: "easeOut" }}
-                  fill="#f8fafc"
-                />
-              ))
-            )}
           </g>
         )}
 
@@ -444,26 +427,24 @@ export const GameGrid: React.FC<GameGridProps> = ({
 
             {/* SLEEVE FLOWER PATTERN PRINTS (CRISP WHITE DOTS ALONG THE SLEEVE VECTOR) */}
             {sleeveFactor > 0 && (
-              <>
-                <circle
-                  cx={`${x1 + dx * sleeveFactor * 0.4}%`}
-                  cy={`${y1 + dy * sleeveFactor * 0.4}%`}
-                  r="1.2"
+              <g>
+                <rect
+                  x={`${x1 + dx * sleeveFactor * 0.4}%`}
+                  y={`${y1 + dy * sleeveFactor * 0.4}%`}
+                  width="2.4"
+                  height="2.4"
+                  rx="1.2"
                   fill="#ffffff"
                 />
-                <circle
-                  cx={`${x1 + dx * sleeveFactor * 0.75}%`}
-                  cy={`${y1 + dy * sleeveFactor * 0.75}%`}
-                  r="1.2"
+                <rect
+                  x={`${x1 + dx * sleeveFactor * 0.75}%`}
+                  y={`${y1 + dy * sleeveFactor * 0.75}%`}
+                  width="2.4"
+                  height="2.4"
+                  rx="1.2"
                   fill="#ffffff"
                 />
-                <circle
-                  cx={`${x1 + dx * sleeveFactor * 0.55 + (player.direction === 'up' || player.direction === 'down' ? -1 : 1.2)}%`}
-                  cy={`${y1 + dy * sleeveFactor * 0.55 + (player.direction === 'left' || player.direction === 'right' ? -1.2 : 0)}%`}
-                  r="0.8"
-                  fill="#ffffff"
-                />
-              </>
+              </g>
             )}
 
             {/* C. CRISP RETRO CLENCHED PIXEL FIST */}
@@ -487,10 +468,12 @@ export const GameGrid: React.FC<GameGridProps> = ({
         {/* D. IMPACT SPARKLES & ATTACK WARNING CIRCLES ON MAX REACH FRAME 2 */}
         {attackFrame === 2 && (
           <g id="impact-sparks">
-            <circle
-              cx={`${x2}%`}
-              cy={`${y2}%`}
-              r="15"
+            <rect
+              x={`${x2 - 3}%`}
+              y={`${y2 - 3}%`}
+              width="6%"
+              height="6%"
+              rx="50%"
               fill="url(#fistGlow)"
             />
             {/* Quick electric retro sparks radiating out */}
