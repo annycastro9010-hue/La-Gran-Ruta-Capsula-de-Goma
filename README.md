@@ -152,3 +152,5 @@ npm run dev
 Este proyecto es una **parodia/fan game educativo** sin fines de lucro.  
 Los nombres de personajes son variantes originales (Zack "Tres Filos", Hacha-Hierro, etc.).  
 One Piece es propiedad de Eiichiro Oda / Shueisha.
+
+<!-- LAST_DEPLOY --> `2026-07-27 20:32 UTC` · commit `1dcd75a — docs: Add comprehensive README with stack, levels, controls. Update GitHub Actions to auto-stamp deploy timestamp in README on each push`
