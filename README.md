@@ -153,4 +153,4 @@ Este proyecto es una **parodia/fan game educativo** sin fines de lucro.
 Los nombres de personajes son variantes originales (Zack "Tres Filos", Hacha-Hierro, etc.).  
 One Piece es propiedad de Eiichiro Oda / Shueisha.
 
-<!-- LAST_DEPLOY --> `2026-07-27 20:43 UTC` · commit `1f5d7e8 — Fix: Replace old inline mobile circular buttons with ControlsOverlay (shows keys W/A/S/D, Space, E, R, Q, Shift). Fix blank screen by initializing grid state on component creation.`
+<!-- LAST_DEPLOY --> `2026-07-27 20:49 UTC` · commit `2627a97 — style: Restore retro arcade circular buttons layout with stylish keyboard key badges (W, A, S, D, Space, E, R, Q, Shift)`
