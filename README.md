@@ -153,4 +153,4 @@ Este proyecto es una **parodia/fan game educativo** sin fines de lucro.
 Los nombres de personajes son variantes originales (Zack "Tres Filos", Hacha-Hierro, etc.).  
 One Piece es propiedad de Eiichiro Oda / Shueisha.
 
-<!-- LAST_DEPLOY --> `2026-07-27 21:07 UTC` · commit `e2cc1bf — FIX DEFINITIVO: Eliminar etiquetas SVG <circle> con valores invalidos/porcentajes en GameGrid.tsx que causaban 'Failed to execute removeChild on Node' y pantalla blanca. Agregar ErrorBoundary.`
+<!-- LAST_DEPLOY --> `2026-07-29 22:25 UTC` · commit `4c05b2a — FIX DEFINITIVO PANTALLA BLANCA: Eliminar AnimatePresence en floatingTexts que causaba removeChild DOM race condition, hacer sincrono la apertura de cofres con llaves, agregar ErrorBoundary clase nativa de React y defensiva en detectMood`
