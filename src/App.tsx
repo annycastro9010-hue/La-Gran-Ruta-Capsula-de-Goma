@@ -1186,27 +1186,24 @@ export default function App() {
           spawnFloatingText(tgt.x, tgt.y, '🔑 LLAVE ENCONTRADA!', 'text-amber-300 font-extrabold animate-bounce');
           setPlayer((prev) => ({ ...prev, hasKey: true }));
           if (currentLevel === 1) {
-            setTimeout(() => {
-              setDialogueSeq({
-                dialogues: [
-                  {
-                    id: 'koby_immediate_key_1',
-                    speaker: 'Koby',
-                    avatar: ' Koby aliviado',
-                    text: '¡¡SIII!! ¡Luffy-san, has encontrado la Llave del Sótano! ¡Ahora podemos escapar!',
-                  },
-                  {
-                    id: 'koby_immediate_key_2',
-                    speaker: 'Koby',
-                    avatar: ' Koby señalando',
-                    text: '¡Rápido! Abre el portón de madera y sube por las escaleras de madera en la esquina superior derecha en la posición (13, 2). ¡Eso nos llevará al Segundo Nivel (La Cubierta)!',
-                  }
-                ],
-                currentIndex: 0,
-                triggerType: 'koby-guidance-immediate'
-              });
-              // Keep status as 'playing' so gameplay map does NOT unmount!
-            }, 600);
+            setDialogueSeq({
+              dialogues: [
+                {
+                  id: 'koby_immediate_key_1',
+                  speaker: 'Koby',
+                  avatar: ' Koby aliviado',
+                  text: '¡¡SIII!! ¡Luffy-san, has encontrado la Llave del Sótano! ¡Ahora podemos escapar!',
+                },
+                {
+                  id: 'koby_immediate_key_2',
+                  speaker: 'Koby',
+                  avatar: ' Koby señalando',
+                  text: '¡Rápido! Abre el portón de madera y sube por las escaleras de madera en la esquina superior derecha en la posición (13, 2). ¡Eso nos llevará al Segundo Nivel (La Cubierta)!',
+                }
+              ],
+              currentIndex: 0,
+              triggerType: 'koby-guidance-immediate'
+            });
           }
         } else if (chestsItem === 'map') {
           spawnFloatingText(tgt.x, tgt.y, '🗺️ MAPA DEL GRAND LINE!', 'text-emerald-400 font-extrabold animate-pulse');
@@ -1417,6 +1414,9 @@ export default function App() {
   // Cycles forward active conversations frames
   const handleNextDialogue = () => {
     setDialogueSeq((prev) => {
+      if (!prev.dialogues || prev.dialogues.length === 0) {
+        return { ...prev, triggerType: null, currentIndex: 0 };
+      }
       const isLast = prev.currentIndex >= prev.dialogues.length - 1;
       if (isLast) {
         // Close dialogue system and handle level transition or story triggers

@@ -1362,24 +1362,19 @@ export const GameGrid: React.FC<GameGridProps> = ({
       </div>
 
       {/* Floating Retro Damage and Sparkle labels (Zelda-style feedback) */}
-      <AnimatePresence>
-        {floatingTexts.map((item) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 1, y: item.y * 8.33 + '%', scale: 0.8 }}
-            animate={{ opacity: 0, y: (item.y - 1.2) * 8.33 + '%', scale: 1.2 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.65, ease: "easeOut" }}
-            style={{
-              left: `${item.x * 6.25}%`,
-              width: '6.25%',
-            }}
-            className={`absolute z-40 text-center font-mono text-[11px] font-extrabold select-none whitespace-nowrap bg-slate-950/80 px-1.5 py-0.5 border border-slate-700/50 rounded-md pointer-events-none ${item.color}`}
-          >
-            {item.text}
-          </motion.div>
-        ))}
-      </AnimatePresence>
+      {floatingTexts.map((item) => (
+        <div
+          key={item.id}
+          style={{
+            left: `${item.x * 6.25}%`,
+            top: `${(item.y - 0.6) * 8.33}%`,
+            width: '6.25%',
+          }}
+          className={`absolute z-40 text-center font-mono text-[11px] font-extrabold select-none whitespace-nowrap bg-slate-950/90 px-1.5 py-0.5 border border-slate-700/80 rounded-md pointer-events-none animate-bounce transition-all ${item.color}`}
+        >
+          {item.text}
+        </div>
+      ))}
     </div>
   );
 };

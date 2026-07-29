@@ -137,7 +137,8 @@ const DEFAULT_CONFIG = {
   expression: { default: '💬' },
 };
 
-function detectMood(text: string): string {
+function detectMood(text: string = ''): string {
+  if (!text) return 'default';
   const t = text.toLowerCase();
   if (t.includes('!!') || t.includes('¡¡') || t.includes('emocion') || t.includes('increíble')) return 'excited';
   if (t.includes('grrrr') || t.includes('furioso') || t.includes('¡maldito') || t.includes('¡cómo')) return 'angry';
