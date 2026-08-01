@@ -1,140 +1,88 @@
 import React, { useState, useEffect } from 'react';
 import { Dialogue } from '../types';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, MessageSquare, ArrowRight } from 'lucide-react';
 
 interface DialogueBoxProps {
   dialogue: Dialogue;
   onNext: () => void;
 }
 
-// Character portrait configs with expression + scene background
-const SPEAKER_CONFIG: Record<string, {
-  emoji: string;
-  name: string;
-  color: string;       // Tailwind text color for name
-  border: string;      // border color class
-  bg: string;          // portrait bg gradient
-  sceneBg: string;     // cinematic scene gradient behind whole box
-  expression: Record<string, string>; // mood -> emoji
-}> = {
+const SPEAKER_CONFIG: Record<
+  string,
+  {
+    emoji: string;
+    name: string;
+    color: string;
+    border: string;
+    bg: string;
+    sceneBg: string;
+    expression: Record<string, string>;
+  }
+> = {
   Luffy: {
     emoji: '👒',
     name: 'MONKEY D. LUFFY',
-    color: 'text-amber-400',
-    border: 'border-amber-400',
-    bg: 'from-red-700 via-rose-600 to-amber-500',
-    sceneBg: 'from-red-950/60 via-slate-950/80 to-slate-950/95',
-    expression: {
-      default: '😄', excited: '😆', angry: '😤', serious: '😠',
-      surprised: '😲', sad: '😢', determined: '💪',
-    },
+    color: 'text-yellow-400',
+    border: 'border-yellow-400',
+    bg: 'from-amber-600 via-red-600 to-rose-700',
+    sceneBg: 'from-amber-950/80 via-red-950/70 to-slate-950/95',
+    expression: { default: '😆', excited: '🤩', angry: '😡', determined: '😤', surprised: '😯' },
   },
   Koby: {
     emoji: '👓',
-    name: 'KOBY',
-    color: 'text-pink-400',
-    border: 'border-pink-400',
-    bg: 'from-pink-500 via-purple-500 to-indigo-500',
-    sceneBg: 'from-purple-950/60 via-slate-950/80 to-slate-950/95',
-    expression: {
-      default: '😟', excited: '😊', scared: '😨', surprised: '😮', crying: '😭',
-    },
+    name: 'KOBY (Navegante)',
+    color: 'text-sky-300',
+    border: 'border-sky-400',
+    bg: 'from-sky-600 via-indigo-600 to-slate-700',
+    sceneBg: 'from-sky-950/80 via-slate-950/80 to-slate-950/95',
+    expression: { default: '😨', scared: '😱', crying: '😭', determined: '🥺' },
+  },
+  Alvida: {
+    emoji: '🦹‍♀️',
+    name: 'CAPITANA ALVIDA',
+    color: 'text-rose-400',
+    border: 'border-rose-500',
+    bg: 'from-rose-700 via-red-800 to-stone-900',
+    sceneBg: 'from-rose-950/85 via-red-950/75 to-slate-950/95',
+    expression: { default: '👸', angry: '🤬', laughing: '😈', defeated: '😵' },
   },
   Zoro: {
     emoji: '⚔️',
     name: 'RORONOA ZORO',
     color: 'text-emerald-400',
     border: 'border-emerald-400',
-    bg: 'from-emerald-700 via-green-700 to-teal-600',
-    sceneBg: 'from-emerald-950/60 via-slate-950/80 to-slate-950/95',
-    expression: {
-      default: '😐', angry: '😤', determined: '😏', serious: '🗿', surprised: '😒',
-    },
+    bg: 'from-emerald-700 via-teal-800 to-slate-900',
+    sceneBg: 'from-emerald-950/80 via-teal-950/70 to-slate-950/95',
+    expression: { default: '🥷', angry: '⚡', confident: '😏', chained: '⛓️' },
   },
   Morgan: {
     emoji: '🪓',
-    name: 'CAPITÁN MORGAN',
-    color: 'text-blue-400',
-    border: 'border-blue-500',
-    bg: 'from-slate-700 via-blue-900 to-slate-900',
-    sceneBg: 'from-blue-950/70 via-slate-950/85 to-slate-950/95',
-    expression: {
-      default: '😠', angry: '🤬', screaming: '😤', shocked: '😳',
-    },
+    name: 'CAPITÁN MORGAN (Hacha)',
+    color: 'text-amber-400',
+    border: 'border-amber-500',
+    bg: 'from-amber-700 via-orange-800 to-stone-900',
+    sceneBg: 'from-amber-950/80 via-slate-950/90 to-slate-950/95',
+    expression: { default: '🪓', angry: '😤', laughing: 'HAHA' },
   },
   Helmeppo: {
-    emoji: '😏',
+    emoji: '👱‍♂️',
     name: 'HELMEPPO',
-    color: 'text-yellow-300',
-    border: 'border-yellow-400',
-    bg: 'from-yellow-400 via-amber-500 to-orange-600',
-    sceneBg: 'from-amber-950/60 via-slate-950/80 to-slate-950/95',
-    expression: { default: '😏', scared: '😨', crying: '😭' },
-  },
-  Alvida: {
-    emoji: '🦹‍♀️',
-    name: 'CAPITANA ALVIDA',
-    color: 'text-pink-400',
-    border: 'border-rose-500',
-    bg: 'from-pink-700 via-rose-800 to-slate-900',
-    sceneBg: 'from-rose-950/70 via-slate-950/85 to-slate-950/95',
-    expression: { default: '😤', angry: '🤬', vain: '💅', surprised: '😱' },
-  },
-  Rika: {
-    emoji: '👧',
-    name: 'RIKA',
-    color: 'text-lime-400',
-    border: 'border-lime-400',
-    bg: 'from-lime-500 via-green-500 to-emerald-600',
-    sceneBg: 'from-lime-950/50 via-slate-950/80 to-slate-950/95',
-    expression: { default: '😊', crying: '😭', scared: '😨' },
-  },
-  Nami: {
-    emoji: '🗺️',
-    name: 'NAMI',
-    color: 'text-orange-400',
-    border: 'border-orange-400',
-    bg: 'from-orange-500 via-amber-600 to-yellow-700',
-    sceneBg: 'from-orange-950/60 via-slate-950/80 to-slate-950/95',
-    expression: { default: '😒', happy: '😁', surprised: '😲', scheming: '🙄' },
-  },
-  Buggy: {
-    emoji: '🤡',
-    name: 'BUGGY EL PAYASO',
-    color: 'text-blue-400',
-    border: 'border-blue-500',
-    bg: 'from-blue-700 via-red-600 to-yellow-500',
-    sceneBg: 'from-blue-950/70 via-red-950/50 to-slate-950/95',
-    expression: { default: '🤡', angry: '🤬', laughing: '😂', shocked: '😱' },
-  },
-  Usopp: {
-    emoji: '🎯',
-    name: 'USOPP',
-    color: 'text-yellow-400',
-    border: 'border-yellow-500',
-    bg: 'from-yellow-600 via-amber-700 to-stone-700',
-    sceneBg: 'from-yellow-950/60 via-slate-950/80 to-slate-950/95',
-    expression: { default: '😅', lying: '🤥', scared: '😨', brave: '😤' },
-  },
-  Kuro: {
-    emoji: '🐈‍⬛',
-    name: 'CAPITÁN KURO',
-    color: 'text-slate-300',
-    border: 'border-slate-500',
-    bg: 'from-slate-800 via-zinc-800 to-stone-900',
-    sceneBg: 'from-slate-950/80 via-zinc-950/80 to-slate-950/95',
-    expression: { default: '🧐', cold: '😏', angry: '😤', shocked: '😱' },
+    color: 'text-purple-300',
+    border: 'border-purple-400',
+    bg: 'from-purple-700 via-indigo-800 to-slate-900',
+    sceneBg: 'from-purple-950/80 via-slate-950/90 to-slate-950/95',
+    expression: { default: '😏', scared: '😰' },
   },
 };
 
 const DEFAULT_CONFIG = {
-  emoji: '💬',
-  name: 'SISTEMA',
-  color: 'text-slate-300',
-  border: 'border-slate-600',
-  bg: 'from-slate-700 to-slate-800',
-  sceneBg: 'from-slate-950/80 via-slate-950/85 to-slate-950/95',
-  expression: { default: '💬' },
+  emoji: '📜',
+  name: 'GUÍA DE AVENTURA',
+  color: 'text-amber-300',
+  border: 'border-amber-400',
+  bg: 'from-slate-800 via-amber-900 to-slate-900',
+  sceneBg: 'from-slate-950/85 via-slate-950/90 to-slate-950/98',
+  expression: { default: '📜' },
 };
 
 function detectMood(text: string = ''): string {
@@ -153,7 +101,6 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({ dialogue, onNext }) =>
   const [displayedText, setDisplayedText] = useState('');
   const [isFinished, setIsFinished] = useState(false);
 
-  // Reset typewriter on dialogue change
   useEffect(() => {
     if (!dialogue || !dialogue.text) return;
     setDisplayedText('');
@@ -168,10 +115,10 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({ dialogue, onNext }) =>
         clearInterval(interval);
         setIsFinished(true);
       }
-    }, 18);
+    }, 14);
 
     return () => clearInterval(interval);
-  }, [dialogue?.id ?? dialogue?.text]);
+  }, [dialogue?.id, dialogue?.text]);
 
   if (!dialogue || !dialogue.text) return null;
 
@@ -181,7 +128,6 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({ dialogue, onNext }) =>
 
   const handleClick = () => {
     if (!isFinished) {
-      // Skip typewriter — show full text immediately
       setDisplayedText(dialogue.text);
       setIsFinished(true);
     } else {
@@ -190,86 +136,52 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({ dialogue, onNext }) =>
   };
 
   return (
-    /* Full-screen semi-transparent overlay — game grid stays mounted underneath */
-    <div
-      className="fixed inset-0 z-50 flex items-end justify-center pointer-events-none"
-      style={{ paddingBottom: '0' }}
+    <div 
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-2 sm:p-4 bg-black/40 backdrop-blur-[2px] pointer-events-auto select-none"
+      onClick={handleClick}
     >
-      {/* Cinematic letterbox gradient at bottom */}
-      <div className={`absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t ${cfg.sceneBg} pointer-events-none`} />
-
-      {/* Dialogue card */}
-      <div
-        onClick={handleClick}
-        className="relative pointer-events-auto w-full max-w-3xl mx-auto mb-0 cursor-pointer select-none"
-        style={{ zIndex: 51 }}
+      <div 
+        className="w-full max-w-2xl bg-slate-950/98 border-2 sm:border-4 border-amber-400/90 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.3)] flex flex-col cursor-pointer transition-all active:scale-[0.995]"
       >
-        {/* Scene label top-left (e.g. "⛵ Barco de Alvida — Nivel 1") */}
-        <div className="absolute -top-7 left-4 text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse inline-block" />
-          {dialogue.speaker !== 'Sistema' ? `${cfg.emoji} ${dialogue.speaker}` : '📍 NARRADOR'}
+        {/* Speaker Top Bar */}
+        <div className={`w-full px-3 py-1.5 bg-gradient-to-r ${cfg.bg} border-b border-amber-400/50 flex items-center justify-between`}>
+          <div className="flex items-center gap-2">
+            <span className="text-xl sm:text-2xl drop-shadow">{cfg.emoji}</span>
+            <span className="font-mono font-black text-xs sm:text-sm tracking-wider uppercase text-yellow-200">
+              {cfg.name}
+            </span>
+          </div>
+          <span className="text-xs bg-slate-950/80 px-2 py-0.5 rounded-full border border-amber-400/40 text-amber-300 font-mono font-bold">
+            {expression} {dialogue.speaker}
+          </span>
         </div>
 
-        {/* Main box */}
-        <div
-          className={`w-full bg-slate-950/95 border-t-4 ${cfg.border} flex gap-0 overflow-hidden shadow-[0_-10px_60px_rgba(0,0,0,0.9)]`}
-          style={{ minHeight: '120px' }}
-        >
-          {/* Left: Character portrait block */}
-          <div className={`flex flex-col items-center justify-end shrink-0 bg-gradient-to-b ${cfg.bg} relative`}
-            style={{ width: '88px', minHeight: '120px' }}>
-            {/* Expression badge */}
-            <span
-              className="absolute top-2 right-1 text-base drop-shadow-lg z-10 select-none"
-              style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))' }}
+        {/* Dialogue Text Content Area */}
+        <div className="p-3.5 sm:p-5 flex flex-col justify-between gap-3 bg-slate-950/95 min-h-[110px] max-h-[220px] overflow-y-auto">
+          <p className="font-sans text-sm sm:text-base leading-relaxed text-slate-100 font-medium tracking-wide">
+            {displayedText}
+            {!isFinished && (
+              <span className="inline-block w-2 h-4 ml-1 bg-amber-400 animate-pulse align-middle" />
+            )}
+          </p>
+
+          {/* Action guidance footer bar */}
+          <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
+            <span className="text-[10px] sm:text-xs font-mono text-slate-400 flex items-center gap-1">
+              <MessageSquare className="w-3 h-3 text-amber-400" />
+              <span>Haz clic o presiona <kbd className="px-1.5 py-0.5 bg-slate-900 border border-slate-700 rounded text-amber-400 font-black">ESPACIO</kbd></span>
+            </span>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClick();
+              }}
+              className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-mono font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md transition-all"
             >
-              {expression}
-            </span>
-            {/* Big emoji sprite portrait */}
-            <span className="text-5xl pb-2 drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] select-none z-10">
-              {cfg.emoji}
-            </span>
-            {/* Shimmer overlay */}
-            <div className="absolute inset-0 bg-white/5 pointer-events-none" />
-          </div>
-
-          {/* Right: Text area */}
-          <div className="flex-1 flex flex-col justify-between p-3 sm:p-4 min-h-0">
-            {/* Speaker name bar */}
-            <div className="flex items-center justify-between mb-1.5">
-              <span className={`font-mono text-[10px] sm:text-xs font-black tracking-widest uppercase ${cfg.color}`}>
-                {cfg.name}
-              </span>
-              {/* Pixel corner decoration */}
-              <div className="flex gap-0.5">
-                <div className={`w-1.5 h-1.5 ${cfg.border.replace('border-','bg-')} opacity-60`} />
-                <div className={`w-1.5 h-1.5 ${cfg.border.replace('border-','bg-')} opacity-40`} />
-                <div className={`w-1.5 h-1.5 ${cfg.border.replace('border-','bg-')} opacity-20`} />
-              </div>
-            </div>
-
-            {/* Dialogue text with typewriter cursor */}
-            <p className="font-sans text-[13px] sm:text-[15px] leading-relaxed text-slate-100 tracking-wide flex-1 min-h-[44px]">
-              {displayedText}
-              {!isFinished && (
-                <span className="inline-block w-2.5 h-[1em] ml-0.5 bg-amber-400 animate-pulse align-middle" />
-              )}
-            </p>
-
-            {/* Footer: advance hint */}
-            <div className="flex justify-end items-center mt-2 gap-1.5 text-[9px] sm:text-[10px] font-mono text-slate-500 select-none">
-              {isFinished ? (
-                <>
-                  <span className="text-amber-400 font-bold">Siguiente</span>
-                  <ChevronRight className="w-3 h-3 text-amber-400 animate-bounce" />
-                  <kbd className="px-1.5 py-0.5 bg-slate-900 border border-slate-700 rounded text-amber-400 font-black text-[8px]">
-                    ESPACIO / CLICK
-                  </kbd>
-                </>
-              ) : (
-                <span className="text-slate-600 italic">click para saltar...</span>
-              )}
-            </div>
+              <span>{isFinished ? 'Siguiente' : 'Saltar'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
       </div>
