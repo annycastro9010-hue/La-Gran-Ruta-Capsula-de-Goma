@@ -153,4 +153,4 @@ Este proyecto es una **parodia/fan game educativo** sin fines de lucro.
 Los nombres de personajes son variantes originales (Zack "Tres Filos", Hacha-Hierro, etc.).  
 One Piece es propiedad de Eiichiro Oda / Shueisha.
 
-<!-- LAST_DEPLOY --> `2026-08-01 20:44 UTC` · commit `9f59b93 — perf: Acelerar respuesta de movimiento a 110ms y ajustar curva de aceleracion cubic-bezier a 0.14s para controles super ligeros`
+<!-- LAST_DEPLOY --> `2026-08-01 20:51 UTC` · commit `d5155ca — fix: Corregir removeChild nativo en DialogueBox preservando la estructura estatica de nodos DOM en el texto e incrementando velocidad de lectura`
