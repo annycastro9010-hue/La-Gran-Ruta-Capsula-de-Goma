@@ -150,8 +150,9 @@ export default function App() {
   const handleResetLevel = useCallback(() => {
     stopAmbientMusic();
     setCurrentLevel(1);
-    setGrid(buildInitialGrid(1));
-    setEnemies(getInitialEnemies(1));
+    setSubMap('main');
+    setGrid(buildInitialGrid(1, 'main'));
+    setEnemies(getInitialEnemies(1, 'main'));
     setPlayer({
       x: 1,
       y: 5,
@@ -190,8 +191,9 @@ export default function App() {
   // Set specific chapter/level directly for debugging and custom play
   const changeToLevel = useCallback((lvl: number) => {
     setCurrentLevel(lvl);
-    setGrid(buildInitialGrid(lvl));
-    setEnemies(getInitialEnemies(lvl));
+    setSubMap('main');
+    setGrid(buildInitialGrid(lvl, 'main'));
+    setEnemies(getInitialEnemies(lvl, 'main'));
     setFloatingTexts([]);
 
     if (lvl === 1) {
@@ -723,26 +725,31 @@ export default function App() {
       // Handle stairs level transition trigger
       if (canMove && grid[targetY] && grid[targetY][targetX] && grid[targetY][targetX].type === 'stairs') {
         if (currentLevel === 1) {
-          // Transition to Level 2 (Deck)
-          unlockToLevel(2);
-          setTimeout(() => {
-            setCurrentLevel(2);
-            setGrid(buildInitialGrid(2));
-            setEnemies(getInitialEnemies(2));
+          if (subMap === 'main') {
+            // Subir de la Bodega a la Cubierta del Barco de Alvida
+            setSubMap('ship_deck');
+            setGrid(buildInitialGrid(1, 'ship_deck'));
+            setEnemies(getInitialEnemies(1, 'ship_deck'));
             setPlayer((posPrev) => ({
               ...posPrev,
-              x: 2,
-              y: 5,
-              hasKey: false, // Reset Key so they search for the Cabin Key on Level 2
+              x: 13,
+              y: 2,
             }));
             playSound('unlock');
-            setDialogueSeq({
-              dialogues: DECK_TRANSITION_DIALOGUES.dialogues,
-              currentIndex: 0,
-              triggerType: 'zoro-meet'
-            });
-            spawnFloatingText(2, 5, '🪜 ¡SUBISTE A LA CUBIERTA!', 'text-yellow-404 font-extrabold animate-bounce');
-          }, 100);
+            spawnFloatingText(13, 2, '☀️ ¡SUBISTE A LA CUBIERTA DE ALVIDA!', 'text-yellow-300 font-extrabold animate-bounce');
+          } else if (subMap === 'ship_deck') {
+            // Bajar de vuelta a la Bodega
+            setSubMap('main');
+            setGrid(buildInitialGrid(1, 'main'));
+            setEnemies(getInitialEnemies(1, 'main'));
+            setPlayer((posPrev) => ({
+              ...posPrev,
+              x: 13,
+              y: 2,
+            }));
+            playSound('unlock');
+            spawnFloatingText(13, 2, '🪜 ¡BAJASTE A LA BODEGA!', 'text-amber-400 font-extrabold animate-bounce');
+          }
           return prev;
         } else if (currentLevel === 2) {
           if (subMap === 'house_1f') {
@@ -828,9 +835,9 @@ export default function App() {
         }
       }
 
-      // Handle escape lifeboat trigger (Level 2)
-      if (currentLevel === 2 && targetX === 1 && targetY === 10) {
-        const isAlvidaDefeated = !enemies.some(e => e.isBoss && e.hp > 0);
+      // Handle escape lifeboat trigger (Level 1 Ship Deck -> Zarpar a Shells Town Level 2)
+      if (currentLevel === 1 && subMap === 'ship_deck' && targetX === 2 && targetY === 10) {
+        const isAlvidaDefeated = !enemies.some(e => e.type === 'alvida' && e.hp > 0);
         if (prev.hasMap && isAlvidaDefeated) {
           canMove = false;
           playSound('victory');
@@ -843,11 +850,11 @@ export default function App() {
         } else if (!isAlvidaDefeated) {
           canMove = false;
           playSound('hit');
-          spawnFloatingText(1, 10, '⛵ ¡Derrota a Alvida primero! 🏴‍☠️', 'text-rose-455 font-bold');
+          spawnFloatingText(2, 10, '⛵ ¡Derrota a la Capitana Alvida primero! 🏴‍☠️', 'text-rose-400 font-bold');
         } else {
           canMove = false;
           playSound('hit');
-          spawnFloatingText(1, 10, '⛵ ¡Necesitas el Mapa del Grand Line! 🗺️', 'text-yellow-405 font-bold');
+          spawnFloatingText(2, 10, '⛵ ¡Coge el Mapa del Grand Line del cofre! 🗺️', 'text-yellow-300 font-bold');
         }
       }
 
@@ -869,29 +876,24 @@ export default function App() {
       }
 
       // Triggers corresponding cutscene coordinates check
-      // 1. Zoom meet Koby near x:7, y:4
-      if (currentLevel === 1 && finalX >= 6 && finalX <= 9 && finalY >= 3 && finalY <= 5 && !triggersHit.current.kobyMeet) {
+      // 1. Zoom meet Koby near x:7, y:4 in Level 1 Basement
+      if (currentLevel === 1 && subMap === 'main' && finalX >= 6 && finalX <= 9 && finalY >= 3 && finalY <= 5 && !triggersHit.current.kobyMeet) {
         triggersHit.current.kobyMeet = true;
-        // Trigger Koby dialogue sequence!
-        setTimeout(() => {
-          setDialogueSeq({
-            dialogues: ZORO_MEET_DIALOGUES.dialogues,
-            currentIndex: 0,
-            triggerType: 'zoro-meet'
-          });
-        }, 100);
+        setDialogueSeq({
+          dialogues: ZORO_MEET_DIALOGUES.dialogues,
+          currentIndex: 0,
+          triggerType: 'zoro-meet'
+        });
       }
 
-      // 2. Boss suite confrontation
-      if (currentLevel === 2 && finalX >= 10 && finalY <= 3 && !triggersHit.current.bossFight) {
+      // 2. Confrontation with Captain Alvida on Level 1 Ship Deck
+      if (currentLevel === 1 && subMap === 'ship_deck' && finalX <= 9 && finalY <= 5 && !triggersHit.current.bossFight) {
         triggersHit.current.bossFight = true;
-        setTimeout(() => {
-          setDialogueSeq({
-            dialogues: BOSS_FIGHT_DIALOGUES.dialogues,
-            currentIndex: 0,
-            triggerType: 'boss-fight'
-          });
-        }, 150);
+        setDialogueSeq({
+          dialogues: BOSS_FIGHT_DIALOGUES.dialogues,
+          currentIndex: 0,
+          triggerType: 'boss-fight'
+        });
       }
 
       // 3. Meet Zoro/Free Zoro near (8,4) on Level 3
@@ -1427,11 +1429,12 @@ export default function App() {
         } else if (prev.triggerType === 'boss-fight') {
           setStatus('playing');
         } else if (prev.triggerType === 'victory') {
-          // Transition from Level 1 (Alvida) to Level 2 (Pueblo y Puerto Shellport - Rescate de Zack)
+          // Transition from Level 1 (Alvida Ship Deck) to Level 2 (Shells Town Harbor - Rescate de Zoro)
           unlockToLevel(2);
           setCurrentLevel(2);
-          setGrid(buildInitialGrid(2));
-          setEnemies(getInitialEnemies(2));
+          setSubMap('main');
+          setGrid(buildInitialGrid(2, 'main'));
+          setEnemies(getInitialEnemies(2, 'main'));
           setPlayer((posPrev) => ({
             ...posPrev,
             x: 1,

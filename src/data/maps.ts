@@ -3,20 +3,36 @@ import { Cell, CellType, Enemy, Position, DialogueSequence } from '../types';
 export const MAP_WIDTH = 16;
 export const MAP_HEIGHT = 12;
 
-// LEVEL 1: EL SÓTANO DE LA BODEGA (Cargo hold of Alvida's ship)
+// LEVEL 1 SUBMAP 1: EL SÓTANO DE LA BODEGA (Cargo hold of Alvida's ship)
 const BASEMENT_TEMPLATE = [
   ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // 0
   ['W', 'W', 'E', 'B', 'E', 'W', 'W', 'E', 'E', 'E', 'W', 'W', 'W', 'W', 'W', 'W'], // 1
-  ['W', 'W', 'E', 'M', 'E', 'W', 'W', 'E', 'M', 'E', 'W', 'W', 'E', 'T', 'W', 'W'], // 2  -- T = Stairs UP!
-  ['W', 'E', 'E', 'E', 'E', 'L', 'E', 'E', 'E', 'E', 'L', 'E', 'E', 'E', 'E', 'W'], // 3  -- L = Locked cellar gate
-  ['W', 'E', 'B', 'B', 'E', 'W', 'E', 'K', 'E', 'W', 'E', 'B', 'B', 'E', 'E', 'W'], // 4  -- K = Scared Koby
-  ['W', 'X', 'E', 'E', 'E', 'W', 'E', 'E', 'E', 'W', 'E', 'E', 'E', 'E', 'E', 'W'], // 5  -- X = Luffy's starting barrel
+  ['W', 'W', 'E', 'M', 'E', 'W', 'W', 'E', 'M', 'E', 'W', 'W', 'E', 'T', 'W', 'W'], // 2  -- T = Escaleras a Cubierta (13,2)
+  ['W', 'E', 'E', 'E', 'E', 'L', 'E', 'E', 'E', 'E', 'L', 'E', 'E', 'E', 'E', 'W'], // 3  -- L = Portón del sótano
+  ['W', 'E', 'B', 'B', 'E', 'W', 'E', 'K', 'E', 'W', 'E', 'B', 'B', 'E', 'E', 'W'], // 4  -- K = Koby asustado
+  ['W', 'X', 'E', 'E', 'E', 'W', 'E', 'E', 'E', 'W', 'E', 'E', 'E', 'E', 'E', 'W'], // 5  -- X = Barril de Luffy
   ['W', 'E', 'E', 'B', 'E', 'W', 'W', 'W', 'W', 'W', 'E', 'E', 'B', 'E', 'E', 'W'], // 6
   ['W', 'W', 'E', 'M', 'E', 'E', 'D', 'D', 'E', 'E', 'E', 'M', 'E', 'E', 'W', 'W'], // 7
-  ['W', 'W', 'E', 'E', 'B', 'E', 'D', 'D', 'E', 'E', 'D', 'E', 'B', 'C', 'W', 'W'], // 8  -- C = Chest with Cellar Key to unlock gate L
+  ['W', 'W', 'E', 'E', 'B', 'E', 'D', 'D', 'E', 'E', 'D', 'E', 'B', 'C', 'W', 'W'], // 8  -- C = Cofre Llave Sótano (13,8)
   ['W', 'W', 'W', 'W', 'W', 'E', 'E', 'B', 'E', 'E', 'W', 'W', 'W', 'W', 'W', 'W'], // 9
   ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // 10
   ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // 11
+];
+
+// LEVEL 1 SUBMAP 2: CUBIERTA SUPERIOR DEL BARCO DE ALVIDA (Batalla de Jefe con Alvida)
+const ALVIDA_DECK_TEMPLATE = [
+  ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'], // 0 Mar
+  ['O', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'O'], // 1 Barandilla
+  ['O', 'W', 'D', 'B', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'B', 'T', 'W', 'O'], // 2 T = Escaleras a la bodega (13,2)
+  ['O', 'W', 'D', 'E', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'W', 'O'], // 3
+  ['O', 'W', 'D', 'D', 'D', 'B', 'D', 'D', 'D', 'B', 'D', 'D', 'E', 'D', 'W', 'O'], // 4
+  ['O', 'W', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'W', 'O'], // 5
+  ['O', 'W', 'D', 'E', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'E', 'D', 'W', 'O'], // 6
+  ['O', 'W', 'D', 'D', 'D', 'B', 'D', 'D', 'D', 'B', 'D', 'D', 'D', 'D', 'W', 'O'], // 7
+  ['O', 'W', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'S', 'W', 'O'], // 8 S = Cofre del Mapa del Grand Line (13,8)
+  ['O', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'O'], // 9
+  ['O', 'O', 'T', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'O', 'O', 'O', 'O'], // 10 T = Bote Salvavidas (2,10)
+  ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'], // 11
 ];
 
 // LEVEL 2: PUEBLO Y FORTALEZA SHELLPORT (Estilo Zelda: Minish Cap)
@@ -117,6 +133,7 @@ const HOUSE_2F_TEMPLATE = [
 
 export function buildInitialGrid(level: number = 1, subMap: string = 'main'): Cell[][] {
   const template = 
+    subMap === 'ship_deck' ? ALVIDA_DECK_TEMPLATE :
     subMap === 'house_1f' ? HOUSE_1F_TEMPLATE :
     subMap === 'house_2f' ? HOUSE_2F_TEMPLATE :
     level === 1 ? BASEMENT_TEMPLATE : 
@@ -219,9 +236,63 @@ export function buildInitialGrid(level: number = 1, subMap: string = 'main'): Ce
   return grid;
 }
 
-export function getInitialEnemies(level: number = 1): Enemy[] {
+export function getInitialEnemies(level: number = 1, subMap: string = 'main'): Enemy[] {
   if (level === 1) {
-    // LEVEL 1: Cargo Basement Recruit patrols
+    if (subMap === 'ship_deck') {
+      // LEVEL 1 SUBMAP 2: Alvida's Ship Deck (Boss Battle with Captain Alvida)
+      return [
+        {
+          id: 'deck_pirate_1',
+          type: 'pirate',
+          x: 4,
+          y: 4,
+          direction: 'right',
+          hp: 15,
+          maxHp: 15,
+          speed: 1,
+          patrolPath: [{ x: 4, y: 4 }, { x: 4, y: 7 }],
+          patrolIndex: 0,
+          state: 'patrolling',
+          actionTimer: 0,
+        },
+        {
+          id: 'deck_pirate_2',
+          type: 'pirate',
+          x: 11,
+          y: 4,
+          direction: 'left',
+          hp: 15,
+          maxHp: 15,
+          speed: 1,
+          patrolPath: [{ x: 11, y: 4 }, { x: 11, y: 7 }],
+          patrolIndex: 0,
+          state: 'patrolling',
+          actionTimer: 0,
+        },
+        {
+          id: 'boss_alvida',
+          type: 'alvida',
+          x: 7,
+          y: 3,
+          direction: 'down',
+          hp: 80,
+          maxHp: 80,
+          speed: 1.2,
+          patrolPath: [
+            { x: 7, y: 3 },
+            { x: 9, y: 3 },
+            { x: 9, y: 5 },
+            { x: 7, y: 5 },
+          ],
+          patrolIndex: 0,
+          state: 'patrolling',
+          actionTimer: 0,
+          isBoss: true,
+        }
+      ];
+    }
+
+    // LEVEL 1 SUBMAP 1: Cargo Basement Recruit patrols
     return [
       {
         id: 'basement_pirate_1',
@@ -256,24 +327,6 @@ export function getInitialEnemies(level: number = 1): Enemy[] {
           { x: 10, y: 8 },
           { x: 12, y: 8 },
           { x: 12, y: 4 },
-        ],
-        patrolIndex: 0,
-        state: 'patrolling',
-        actionTimer: 0,
-      },
-      {
-        id: 'basement_officer',
-        type: 'pirate-officer',
-        x: 12,
-        y: 3,
-        direction: 'left',
-        hp: 18,
-        maxHp: 18,
-        speed: 1.1,
-        patrolPath: [
-          { x: 12, y: 3 },
-          { x: 8, y: 3 },
-          { x: 12, y: 3 },
         ],
         patrolIndex: 0,
         state: 'patrolling',
