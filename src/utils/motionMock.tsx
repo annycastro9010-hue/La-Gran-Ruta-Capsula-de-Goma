@@ -1,17 +1,27 @@
 import React from 'react';
 
-// Lightweight, crash-proof proxy component that converts motion.div, motion.span, motion.rect, motion.svg, motion.g, etc.
-// into native HTML/SVG elements, eliminating Framer Motion DOM removeChild race conditions completely.
+// Component reference cache so React receives STABLE component references
+// on every render. This prevents React from constantly unmounting/remounting
+// sprites like Luffy, Koby, Alvida and enemies.
+const componentCache: Record<string, React.FC<any>> = {};
+
+function getMotionComponent(tag: string) {
+  if (!componentCache[tag]) {
+    const Component = ({ initial, animate, exit, transition, ...props }: any) => {
+      const Tag = tag as any;
+      return <Tag {...props} />;
+    };
+    Component.displayName = `MotionMock(${tag})`;
+    componentCache[tag] = Component;
+  }
+  return componentCache[tag];
+}
+
 export const motion: any = new Proxy(
   {},
   {
     get(_target, prop: string) {
-      const Component = ({ initial, animate, exit, transition, ...props }: any) => {
-        const Tag = prop as any;
-        return <Tag {...props} />;
-      };
-      Component.displayName = `MotionMock(${prop})`;
-      return Component;
+      return getMotionComponent(prop);
     },
   }
 );
