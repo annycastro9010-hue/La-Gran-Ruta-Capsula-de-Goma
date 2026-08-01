@@ -96,11 +96,9 @@ export const ZoroSprite: React.FC<ZoroSpriteProps> = ({
               <rect x="11.2" y="9" width="1.6" height="1.2" fill={C_SKIN} />
               <rect x="8.5" y="4.5" width="7" height="5" fill={C_SKIN} />
 
-              {/* Intense Defiant Eyes with Eye Slit/Scar */}
+              {/* Intense Defiant Eyes */}
               <rect x="9.5" y="6" width="1.2" height="1.2" fill={C_OUTLINE} />
               <rect x="13.5" y="6" width="1.2" height="1.2" fill={C_OUTLINE} />
-              {/* Left Eye Scar */}
-              <line x1="10" y1="5" x2="10" y2="7.8" stroke="#991b1b" strokeWidth="0.8" />
               {/* Dark Grin */}
               <line x1="10.5" y1="8" x2="13.5" y2="8" stroke={C_OUTLINE} strokeWidth="0.9" />
 
