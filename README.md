@@ -153,4 +153,4 @@ Este proyecto es una **parodia/fan game educativo** sin fines de lucro.
 Los nombres de personajes son variantes originales (Zack "Tres Filos", Hacha-Hierro, etc.).  
 One Piece es propiedad de Eiichiro Oda / Shueisha.
 
-<!-- LAST_DEPLOY --> `2026-08-01 17:10 UTC` · commit `0f78996 — Update title to Gran Ruta Pirata and add Whitebeard favicon`
+<!-- LAST_DEPLOY --> `2026-08-01 17:49 UTC` · commit `b6e342c — fix: Mapear animaciones x/y a CSS style transforms en motionMock para corregir el posicionamiento de Luffy y enemigos`
