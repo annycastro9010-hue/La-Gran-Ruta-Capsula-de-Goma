@@ -30,7 +30,6 @@ import { playSound, playAmbientMusic, stopAmbientMusic, getAmbientZoneForLevel }
 import { getPasherTheme } from './utils/pasher';
 import { PhaserGameContainer } from './game/PhaserGameContainer';
 import { Volume2, Trophy, RefreshCw, Flame, Navigation, Key, HelpCircle, Swords, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
-import { motion } from 'motion/react';
 
 export default function App() {
   // Game running state
@@ -1718,10 +1717,8 @@ export default function App() {
         
         {/* State A: Splash intro screens and credits */}
         {status === 'intro' && dialogueSeq.triggerType === null && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-lg bg-slate-900 border-4 border-amber-600 p-8 rounded-2xl text-center shadow-2xl relative"
+          <div 
+            className="w-full max-w-lg bg-slate-900 border-4 border-amber-600 p-8 rounded-2xl text-center shadow-2xl relative animate-pulse-slow"
           >
             <div className="absolute top-1 left-1 w-3 h-3 bg-amber-500" />
             <div className="absolute top-1 right-1 w-3 h-3 bg-amber-500" />
@@ -1753,7 +1750,7 @@ export default function App() {
             >
               🏴‍☠️ Comenzar Aventura
             </button>
-          </motion.div>
+          </div>
         )}
 
         {/* State B: Active Gameplay Viewport — ALWAYS visible when grid is loaded */}
@@ -2069,10 +2066,8 @@ export default function App() {
         {/* State C: Game Over — floating overlay, does NOT unmount gameplay */}
         {status === 'gameover' && (
           <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
-            <motion.div 
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              className="w-full max-w-sm bg-slate-900 border-4 border-rose-600 p-6 rounded-2xl text-center shadow-2xl mx-4"
+            <div 
+              className="w-full max-w-sm bg-slate-900 border-4 border-rose-600 p-6 rounded-2xl text-center shadow-2xl mx-4 transition-all"
             >
               <div className="w-20 h-20 mx-auto rounded-3xl bg-rose-950 border-2 border-rose-500 flex items-center justify-center text-4xl mb-3 shadow-[0_0_15px_rgba(244,63,94,0.4)]">
                 💀
@@ -2090,16 +2085,14 @@ export default function App() {
               >
                 <RefreshCw className="w-4 h-4" /> Intentarlo de Nuevo
               </button>
-            </motion.div>
+            </div>
           </div>
         )}
 
         {/* State D: Level Completed Victory — floating overlay */}
         {status === 'victory' && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-lg bg-slate-900 border-4 border-yellow-500 p-8 rounded-2xl text-center shadow-2xl relative"
+          <div 
+            className="w-full max-w-lg bg-slate-900 border-4 border-yellow-500 p-8 rounded-2xl text-center shadow-2xl relative transition-all"
           >
             <div className="absolute top-1 left-1 w-3 h-3 bg-yellow-400" />
             <div className="absolute top-1 right-1 w-3 h-3 bg-yellow-400" />
@@ -2139,7 +2132,7 @@ export default function App() {
             >
               {currentLevel === 3 ? '🎮 Volver a Jugar la Saga' : '🎮 Volver a Jugar el Nivel'}
             </button>
-          </motion.div>
+          </div>
         )}
 
         {/* Dialog system — fixed overlay, renders on top of everything */}

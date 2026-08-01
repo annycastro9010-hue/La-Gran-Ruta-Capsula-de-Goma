@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Cell, CellType, Direction, Enemy, PlayerState, Position } from '../types';
 import { Swords, Anchor, Award, ShieldAlert, Sparkles, HelpCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from '../utils/motionMock';
 import { getPasherTheme, getPasherCellClass } from '../utils/pasher';
 import { LuffySprite } from './LuffySprite';
 import { KobySprite } from './KobySprite';
