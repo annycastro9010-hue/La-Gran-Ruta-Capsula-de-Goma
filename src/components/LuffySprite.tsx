@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion } from '../utils/motionMock';
 import { Direction } from '../types';
 
 interface LuffySpriteProps {
