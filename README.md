@@ -153,4 +153,4 @@ Este proyecto es una **parodia/fan game educativo** sin fines de lucro.
 Los nombres de personajes son variantes originales (Zack "Tres Filos", Hacha-Hierro, etc.).  
 One Piece es propiedad de Eiichiro Oda / Shueisha.
 
-<!-- LAST_DEPLOY --> `2026-08-01 17:01 UTC` · commit `f2e8b89 — fix: Implementar motionMock nativo para desterrar el 100% de errores removeChild y parpadeos de reconciliacion DOM`
+<!-- LAST_DEPLOY --> `2026-08-01 17:04 UTC` · commit `072cac3 — fix: Restaurar visualización completa de LuffySprite con motionMock nativo para SVG y HTML`
