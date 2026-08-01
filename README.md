@@ -153,4 +153,4 @@ Este proyecto es una **parodia/fan game educativo** sin fines de lucro.
 Los nombres de personajes son variantes originales (Zack "Tres Filos", Hacha-Hierro, etc.).  
 One Piece es propiedad de Eiichiro Oda / Shueisha.
 
-<!-- LAST_DEPLOY --> `2026-07-29 22:25 UTC` · commit `4c05b2a — FIX DEFINITIVO PANTALLA BLANCA: Eliminar AnimatePresence en floatingTexts que causaba removeChild DOM race condition, hacer sincrono la apertura de cofres con llaves, agregar ErrorBoundary clase nativa de React y defensiva en detectMood`
+<!-- LAST_DEPLOY --> `2026-08-01 16:43 UTC` · commit `cc9c916 — feat: Nivel 1 Fiel a One Piece Romance Dawn - Bodega -> Escaleras -> Cubierta Superior del Barco de Alvida con Batalla de Jefe contra Capitana Alvida -> Bote Salvavidas`
