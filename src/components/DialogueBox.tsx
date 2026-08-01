@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialogue } from '../types';
-import { ChevronRight, MessageSquare, ArrowRight } from 'lucide-react';
+import { MessageSquare, ArrowRight } from 'lucide-react';
 
 interface DialogueBoxProps {
   dialogue: Dialogue;
@@ -100,22 +100,24 @@ function detectMood(text: string = ''): string {
 export const DialogueBox: React.FC<DialogueBoxProps> = ({ dialogue, onNext }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isFinished, setIsFinished] = useState(false);
+  const textRef = useRef<string>('');
 
   useEffect(() => {
     if (!dialogue || !dialogue.text) return;
+    textRef.current = dialogue.text;
     setDisplayedText('');
     setIsFinished(false);
 
     let idx = 0;
     const interval = setInterval(() => {
-      if (idx < dialogue.text.length) {
-        setDisplayedText(dialogue.text.slice(0, idx + 1));
+      if (idx < textRef.current.length) {
+        setDisplayedText(textRef.current.slice(0, idx + 1));
         idx++;
       } else {
         clearInterval(interval);
         setIsFinished(true);
       }
-    }, 14);
+    }, 10);
 
     return () => clearInterval(interval);
   }, [dialogue?.id, dialogue?.text]);
@@ -126,7 +128,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({ dialogue, onNext }) =>
   const mood = detectMood(dialogue.text);
   const expression = cfg.expression[mood] ?? cfg.expression['default'] ?? cfg.emoji;
 
-  const handleClick = () => {
+  const handleAction = () => {
     if (!isFinished) {
       setDisplayedText(dialogue.text);
       setIsFinished(true);
@@ -137,50 +139,49 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({ dialogue, onNext }) =>
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-2 sm:p-4 bg-black/40 backdrop-blur-[2px] pointer-events-auto select-none"
-      onClick={handleClick}
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-[2px] pointer-events-auto select-none"
+      onClick={handleAction}
     >
       <div 
-        className="w-full max-w-2xl bg-slate-950/98 border-2 sm:border-4 border-amber-400/90 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.3)] flex flex-col cursor-pointer transition-all active:scale-[0.995]"
+        className="w-full max-w-2xl bg-slate-950 border-2 sm:border-4 border-amber-400 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.4)] flex flex-col cursor-pointer"
       >
         {/* Speaker Top Bar */}
-        <div className={`w-full px-3 py-1.5 bg-gradient-to-r ${cfg.bg} border-b border-amber-400/50 flex items-center justify-between`}>
+        <div className={`w-full px-3.5 py-2 bg-gradient-to-r ${cfg.bg} border-b border-amber-400/50 flex items-center justify-between`}>
           <div className="flex items-center gap-2">
-            <span className="text-xl sm:text-2xl drop-shadow">{cfg.emoji}</span>
+            <span className="text-2xl drop-shadow">{cfg.emoji}</span>
             <span className="font-mono font-black text-xs sm:text-sm tracking-wider uppercase text-yellow-200">
               {cfg.name}
             </span>
           </div>
-          <span className="text-xs bg-slate-950/80 px-2 py-0.5 rounded-full border border-amber-400/40 text-amber-300 font-mono font-bold">
+          <span className="text-xs bg-slate-950/90 px-2.5 py-1 rounded-full border border-amber-400/50 text-amber-300 font-mono font-bold">
             {expression} {dialogue.speaker}
           </span>
         </div>
 
         {/* Dialogue Text Content Area */}
-        <div className="p-3.5 sm:p-5 flex flex-col justify-between gap-3 bg-slate-950/95 min-h-[110px] max-h-[220px] overflow-y-auto">
-          <p className="font-sans text-sm sm:text-base leading-relaxed text-slate-100 font-medium tracking-wide">
+        <div className="p-4 sm:p-6 flex flex-col justify-between gap-4 bg-slate-950 min-h-[120px] max-h-[260px] overflow-y-auto">
+          <p className="font-sans text-sm sm:text-base leading-relaxed text-slate-100 font-semibold tracking-wide">
             {displayedText}
-            {!isFinished && (
-              <span className="inline-block w-2 h-4 ml-1 bg-amber-400 animate-pulse align-middle" />
-            )}
+            <span className={`inline-block w-2.5 h-4 ml-1 bg-amber-400 align-middle ${isFinished ? 'opacity-0' : 'animate-pulse opacity-100'}`} />
           </p>
 
           {/* Action guidance footer bar */}
-          <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
-            <span className="text-[10px] sm:text-xs font-mono text-slate-400 flex items-center gap-1">
-              <MessageSquare className="w-3 h-3 text-amber-400" />
-              <span>Haz clic o presiona <kbd className="px-1.5 py-0.5 bg-slate-900 border border-slate-700 rounded text-amber-400 font-black">ESPACIO</kbd></span>
+          <div className="flex items-center justify-between pt-3 border-t border-slate-800">
+            <span className="text-[11px] sm:text-xs font-mono text-slate-300 flex items-center gap-1.5 font-bold">
+              <MessageSquare className="w-3.5 h-3.5 text-amber-400" />
+              <span>Haz clic o presiona <kbd className="px-2 py-0.5 bg-slate-900 border border-slate-700 rounded text-amber-400 font-black">ESPACIO</kbd></span>
             </span>
 
             <button
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                handleClick();
+                handleAction();
               }}
-              className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-mono font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md transition-all"
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all cursor-pointer"
             >
-              <span>{isFinished ? 'Siguiente' : 'Saltar'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>{isFinished ? 'Siguiente ▶' : 'Completar Text ▶'}</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
