@@ -976,8 +976,30 @@ export const LuffySprite: React.FC<LuffySpriteProps> = ({ direction, actionState
                   <rect x="14.7" y="12" width="0.8" height="0.8" fill={C_HAT} />
 
                   {/* ------------------- HANDS & ARMS MOVEMENT STEPS ------------------- */}
-                  {/* Raised hand Adjusting hat Brim (Idle Frame A) */}
-                  {(actionState === 'idle' && idleFrame === 'A') ? (
+                  {(actionState === 'carrying-swords' || actionState === 'swords') ? (
+                    <>
+                      {/* Luffy's arms outstretched carrying Zoro's 3 katanas */}
+                      <rect x="2" y="11" width="4" height="2" fill={C_SKIN} />
+                      <rect x="18" y="11" width="4" height="2" fill={C_SKIN} />
+
+                      {/* Zoro's 3 Katanas bundle across Luffy's chest/arms */}
+                      <rect x="1" y="9.5" width="22" height="1.4" fill="#15803d" stroke="#18181b" strokeWidth="0.4" />
+                      <rect x="4" y="9" width="1.2" height="2.4" fill="#f59e0b" />
+
+                      <rect x="1" y="11" width="22" height="1.4" fill="#991b1b" stroke="#18181b" strokeWidth="0.4" />
+                      <rect x="5.5" y="10.5" width="1.2" height="2.4" fill="#f59e0b" />
+
+                      <rect x="1" y="12.5" width="22" height="1.4" fill="#0f172a" stroke="#18181b" strokeWidth="0.4" />
+                      <rect x="7" y="12" width="1.2" height="2.4" fill="#f59e0b" />
+                    </>
+                  ) : (actionState === 'defending-fuusen' || actionState === 'fuusen') ? (
+                    <>
+                      {/* Gomu Gomu no Fuusen rubber balloon shield */}
+                      <circle cx="12" cy="13" r="8" fill={C_VEST} stroke="#18181b" strokeWidth="0.8" />
+                      <rect x="2" y="12" width="2" height="2" fill={C_SKIN} rx="1" />
+                      <rect x="20" y="12" width="2" height="2" fill={C_SKIN} rx="1" />
+                    </>
+                  ) : (actionState === 'idle' && idleFrame === 'A') ? (
                     <>
                       {/* Left hand raised up high touching hat brim */}
                       <rect x="16.5" y="5.5" width="2" height="3" fill={C_SKIN} />
