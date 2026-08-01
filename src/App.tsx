@@ -595,9 +595,9 @@ export default function App() {
   const movePlayer = useCallback((dir: Direction) => {
     if (status !== 'playing' || player.actionState === 'hit' || dialogueSeq.triggerType !== null) return;
 
-    // Snappy classic walkthrough: throttle steps to exactly one grid cell per 150ms
+    // Snappy classic walkthrough: throttle steps to exactly one grid cell per 110ms
     const now = Date.now();
-    if (now - lastMoveTimeRef.current < 150) {
+    if (now - lastMoveTimeRef.current < 110) {
       return;
     }
     lastMoveTimeRef.current = now;

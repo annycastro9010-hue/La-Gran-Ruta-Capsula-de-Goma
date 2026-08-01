@@ -36,6 +36,9 @@ function getMotionComponent(tag: string) {
 
         if (transformStr) {
           newStyle.transform = transformStr.trim();
+          
+          // Apply a fast, ultra-responsive spring-like CSS transition
+          newStyle.transition = 'transform 0.14s cubic-bezier(0.2, 1.1, 0.4, 1.15)';
         }
       }
 
