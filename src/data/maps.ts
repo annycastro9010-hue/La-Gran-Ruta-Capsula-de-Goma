@@ -292,8 +292,28 @@ export function getInitialEnemies(level: number = 1, subMap: string = 'main'): E
       ];
     }
 
-    // LEVEL 1 SUBMAP 1: Cargo Basement Recruit patrols
+    // LEVEL 1 SUBMAP 1: Cargo Basement Recruit & Lady Alvida patrols
     return [
+      {
+        id: 'basement_alvida',
+        type: 'alvida',
+        x: 7,
+        y: 3,
+        direction: 'down',
+        hp: 50,
+        maxHp: 50,
+        speed: 1,
+        patrolPath: [
+          { x: 7, y: 3 },
+          { x: 9, y: 3 },
+          { x: 9, y: 5 },
+          { x: 7, y: 5 },
+        ],
+        patrolIndex: 0,
+        state: 'patrolling',
+        actionTimer: 0,
+        isBoss: true,
+      },
       {
         id: 'basement_pirate_1',
         type: 'pirate',
