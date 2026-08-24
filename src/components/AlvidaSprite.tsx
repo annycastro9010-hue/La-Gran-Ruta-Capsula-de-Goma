@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import alvidaImg from './alvida_minis.jpg';
 
 interface AlvidaSpriteProps {
   state: 'idle' | 'patrol' | 'chasing' | 'stunned' | 'attacking';
@@ -55,30 +56,14 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
           transform: `scaleX(${scaleX}) translateY(${bounceY}px) rotate(${rotate}deg)` 
         }}
       >
-        {/* Renderizado de la Alvida Minis Chibi elegida */}
+        {/* Renderizado directo del archivo de imagen copiado al bundle */}
         <img 
-          src="https://raw.githubusercontent.com/annycastro9010-hue/La-Gran-Ruta-Capsula-de-Goma/main/src/assets/alvida_minis.png" 
+          src={alvidaImg} 
           alt="Alvida Minis"
-          className="w-full h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
-          onError={(e) => {
-            // Fallback por si la imagen se sirve localmente
-            (e.target as HTMLElement).style.display = 'none';
-          }}
+          className="w-full h-full object-cover rounded-full border-2 border-pink-400 shadow-md drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
         />
 
-        {/* Capa SVG de respaldo de alta fidelidad Minis */}
-        <svg 
-          viewBox="0 0 64 64" 
-          className="w-12 h-12 drop-shadow-[0_4px_10px_rgba(0,0,0,0.7)] absolute inset-0 hidden"
-        >
-          {/* Sombrero rosa con pluma blanca */}
-          <path d="M10,18 Q32,8 54,18 Q32,20 10,18 Z" fill="#EC4899" stroke="#9D174D" strokeWidth="1.5" />
-          <path d="M18,17 Q32,6 46,17 Z" fill="#F43F5E" stroke="#9D174D" strokeWidth="1.2" />
-          <path d="M12,16 Q6,6 2,10 Q8,12 14,17 Z" fill="#F8FAFC" stroke="#CBD5E1" strokeWidth="1" />
-          <circle cx="32" cy="14" r="2.5" fill="#F59E0B" stroke="#B45309" strokeWidth="0.8" />
-        </svg>
-
-        {/* Animación de ataque / mazo */}
+        {/* Animación de ataque */}
         {isAttacking && (
           <div className="absolute -right-3 -top-3 w-8 h-8 text-2xl animate-ping">
             💥
@@ -88,5 +73,6 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
     </div>
   );
 };
+
 
 
