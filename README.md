@@ -153,4 +153,4 @@ Este proyecto es una **parodia/fan game educativo** sin fines de lucro.
 Los nombres de personajes son variantes originales (Zack "Tres Filos", Hacha-Hierro, etc.).  
 One Piece es propiedad de Eiichiro Oda / Shueisha.
 
-<!-- LAST_DEPLOY --> `2026-08-01 20:51 UTC` · commit `d5155ca — fix: Corregir removeChild nativo en DialogueBox preservando la estructura estatica de nodos DOM en el texto e incrementando velocidad de lectura`
+<!-- LAST_DEPLOY --> `2026-08-24 17:07 UTC` · commit `8a265a6 — feat: actualizar sprite de Alvida Minis con sombrero pirata rosa y pluma blanca (estilo Minish Cap)`
