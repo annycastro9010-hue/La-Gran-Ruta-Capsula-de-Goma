@@ -9,11 +9,11 @@ interface AlvidaSpriteProps {
 export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = 'down', hp }) => {
   const [frame, setFrame] = useState(0);
 
-  // Micro walking / breathing cycles
+  // Micro walking / breathing cycles estilo Minish Cap (Minis)
   useEffect(() => {
-    let delay = 220;
-    if (state === 'chasing') delay = 130;  // moves aggressively!
-    if (state === 'stunned') delay = 90;    // vibrates quickly!
+    let delay = 200;
+    if (state === 'chasing') delay = 110;  // Persecución veloz
+    if (state === 'stunned') delay = 80;    // Vibración dazed/aturdida
 
     const timer = setInterval(() => {
       setFrame((f) => (f + 1) % 4);
@@ -23,31 +23,28 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
 
   const isStunned = state === 'stunned';
   const isAttacking = state === 'attacking';
-  const isChasing = state === 'chasing';
 
-  // Hair bouncing offsets
+  // Minish Cap sprite bouncing / sliding offsets
   let hairY = 0;
   let bodyY = 0;
-  let maceAngle = 12;
+  let maceAngle = 15;
   let scaleX = 1;
+  let slideGlow = false;
 
   if (state === 'chasing') {
-    // Aggressive sprinting tilt
-    bodyY = frame % 2 === 0 ? 0.8 : -0.8;
-    hairY = frame % 2 === 0 ? 1.2 : -0.5;
-    maceAngle = frame % 2 === 0 ? 35 : -10;
+    bodyY = frame % 2 === 0 ? 1 : -1;
+    hairY = frame % 2 === 0 ? 1.5 : -1;
+    maceAngle = frame % 2 === 0 ? 40 : -15;
+    slideGlow = true; // Efecto Sube Sube no Mi al perseguir
   } else if (isStunned) {
-    // Comical dizzy vibration offsets
-    bodyY = frame % 2 === 0 ? 1.5 : -1.5;
-    hairY = frame % 2 === 0 ? -1.5 : 1.5;
+    bodyY = frame % 2 === 0 ? 2 : -2;
+    hairY = frame % 2 === 0 ? -2 : 2;
     maceAngle = frame * 45;
   } else {
-    // Light breathing idle
-    bodyY = frame === 1 || frame === 3 ? 0.3 : 0;
-    hairY = frame === 1 || frame === 3 ? 0.6 : 0;
+    bodyY = frame === 1 || frame === 3 ? 0.5 : 0;
+    hairY = frame === 1 || frame === 3 ? 1 : 0;
   }
 
-  // Facing flips for horizontal symmetry
   if (direction === 'left') {
     scaleX = -1;
   }
@@ -56,154 +53,140 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
     <div className="relative w-full h-full flex items-center justify-center select-none pointer-events-none">
       <svg 
         viewBox="0 0 64 64" 
-        className="w-14 h-14 drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)]"
+        className="w-14 h-14 drop-shadow-[0_4px_10px_rgba(0,0,0,0.7)]"
         style={{ transform: `scaleX(${scaleX})` }}
       >
-        {/* Shadow */}
-        <rect x="18" y="52" width="28" height="4" rx="2" fill="rgba(15,23,42,0.55)" />
+        {/* Sube Sube Smooth aura shadow */}
+        <ellipse 
+          cx="32" 
+          cy="53" 
+          rx={slideGlow ? "18" : "14"} 
+          ry="3.5" 
+          fill={slideGlow ? "rgba(244,114,182,0.6)" : "rgba(15,23,42,0.6)"} 
+          className={slideGlow ? "animate-pulse" : ""}
+        />
 
-        {/* --- BACK HAIR (Fucsia Curly Volume) --- */}
+        {/* --- PABELLÓN DE CABELLO OSCURO / ONDULADO (MINIS CAP ALVIDA) --- */}
         <g style={{ transform: `translateY(${hairY}px)` }}>
-          {/* Big puffy curly background hair bulbs */}
-          <rect x="9" y="18" width="18" height="18" rx="9" fill="#EC4899" stroke="#9D174D" strokeWidth="1.8" />
-          <rect x="37" y="18" width="18" height="18" rx="9" fill="#EC4899" stroke="#9D174D" strokeWidth="1.8" />
-          <rect x="6.5" y="28.5" width="19" height="19" rx="9.5" fill="#DB2777" stroke="#9D174D" strokeWidth="1.8" />
-          <rect x="38.5" y="28.5" width="19" height="19" rx="9.5" fill="#DB2777" stroke="#9D174D" strokeWidth="1.8" />
-          <rect x="15" y="36" width="16" height="16" rx="8" fill="#BE185D" stroke="#9D174D" strokeWidth="1.5" />
-          <rect x="33" y="36" width="16" height="16" rx="8" fill="#BE185D" stroke="#9D174D" strokeWidth="1.5" />
-
-          {/* Central top knot ponytail / high bun */}
-          <rect x="25.5" y="3.5" width="13" height="15" rx="6.5" fill="#F43F5E" stroke="#9D174D" strokeWidth="1.8" />
-          <rect x="28.5" y="15" width="7" height="3" rx="0.8" fill="#F59E0B" stroke="#B45309" strokeWidth="0.8" />
+          <path d="M14,22 Q8,34 16,46 Q24,40 22,26 Z" fill="#0F172A" stroke="#020617" strokeWidth="1.5" />
+          <path d="M50,22 Q56,34 48,46 Q40,40 42,26 Z" fill="#0F172A" stroke="#020617" strokeWidth="1.5" />
         </g>
 
-        {/* --- CHARACTER BODY ASSEMBLY --- */}
+        {/* --- BODY ASSEMBLY --- */}
         <g style={{ transform: `translateY(${bodyY}px)` }}>
-          {/* Boots */}
-          <rect x="23" y="47" width="5.5" height="8" rx="1.5" fill="#451A03" stroke="#270F01" strokeWidth="1.5" />
-          <rect x="33.5" y="47" width="5.5" height="8" rx="1.5" fill="#451A03" stroke="#270F01" strokeWidth="1.5" />
-          <rect x="21" y="51" width="7.5" height="4.5" rx="1" fill="#78350F" />
-          <rect x="33.5" y="51" width="7.5" height="4.5" rx="1" fill="#78350F" />
+          {/* Botas pirata moradas/oscuras */}
+          <rect x="23" y="46" width="6" height="8" rx="2" fill="#3B0764" stroke="#1E1B4B" strokeWidth="1.2" />
+          <rect x="35" y="46" width="6" height="8" rx="2" fill="#3B0764" stroke="#1E1B4B" strokeWidth="1.2" />
 
-          {/* Blue pants */}
-          <path d="M22,42 L42,42 L39,48 C36,49 28,49 25,48 Z" fill="#1E3A8A" stroke="#172554" strokeWidth="1.5" />
+          {/* Abrigo de Capitana Pirata (Morado / Carmesí) */}
+          <path d="M19,26 L45,26 L47,45 L17,45 Z" fill="#7E22CE" stroke="#581C87" strokeWidth="1.5" />
+          <path d="M24,26 L40,26 L38,43 L26,43 Z" fill="#9333EA" />
 
-          {/* Golden belt and sash details */}
-          <path d="M20,37 L44,37 L41,43 L23,43 Z" fill="#FBBF24" stroke="#9A3412" strokeWidth="1.5" />
-          <path d="M22,39 H42" stroke="#D97706" strokeWidth="1.2" />
-          {/* Belt buckle */}
-          <rect x="30" y="36.5" width="4.5" height="5.5" fill="#FEF08A" stroke="#B45309" strokeWidth="1.2" />
+          {/* Solapa dorada y fajín pirata */}
+          <path d="M22,38 L42,38 L40,42 L24,42 Z" fill="#F59E0B" stroke="#B45309" strokeWidth="1.2" />
+          <rect x="30" y="37.5" width="4" height="5" fill="#FEF08A" stroke="#78350F" strokeWidth="1" />
 
-          {/* Styled Sleeveless vest over striped undershirt */}
-          <path d="M22,27 C22,23 25,23 32,23 C39,23 42,23 42,27 L41,38 L23,38 Z" fill="#1E293B" stroke="#0F172A" strokeWidth="1.8" />
-          {/* Undershirt white frill lines */}
-          <rect x="25" y="25" width="14" height="12" fill="#FFFFFF" opacity="0.15" />
-          <path d="M26,25 V37 M30,25 V37 M34,25 V37 M38,25 V37" stroke="#E2E8F0" strokeWidth="1.5" />
-          {/* Lavender/pink neck collar scarf */}
-          <path d="M26,23 L32,28 L38,23" stroke="#C084FC" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+          {/* Manos / Brazos con pulseras doradas */}
+          <circle cx="17" cy="30" r="3.5" fill="#FED7AA" stroke="#9A3412" strokeWidth="0.8" />
+          <circle cx="47" cy="30" r="3.5" fill="#FED7AA" stroke="#9A3412" strokeWidth="0.8" />
+          <rect x="15" y="28" width="2" height="4" rx="1" fill="#F59E0B" />
+          <rect x="47" y="28" width="2" height="4" rx="1" fill="#F59E0B" />
 
-          {/* Arms */}
-          <rect x="15.5" y="26.5" width="7" height="7" rx="3.5" fill="#FBCFE8" stroke="#DB2777" strokeWidth="1" />
-          <rect x="41.5" y="26.5" width="7" height="7" rx="3.5" fill="#FBCFE8" stroke="#DB2777" strokeWidth="1" />
+          {/* Cabeza / Rostro elegante estilo Minish Cap */}
+          <rect x="22" y="14" width="20" height="18" rx="9" fill="#FFEDD5" stroke="#9A3412" strokeWidth="1.5" />
 
-          {/* Head & Face */}
-          <rect x="23" y="15" width="18" height="18" rx="9" fill="#FFE4E6" stroke="#970634" strokeWidth="1.8" />
-
-          {/* Bright blushing cheeks */}
-          <rect x="25" y="23.5" width="4" height="4" rx="2" fill="#F472B6" opacity="0.65" />
-          <rect x="35" y="23.5" width="4" height="4" rx="2" fill="#F472B6" opacity="0.65" />
-
-          {/* Face details: Eye Shock or Smirk */}
+          {/* Ojos expresivos Minis */}
           {isStunned ? (
             <>
-              {/* Massive shocked comically dizzy eyes */}
-              <rect x="22.8" y="18.8" width="8.4" height="8.4" rx="4.2" fill="#FFFFFF" stroke="#000000" strokeWidth="1" />
-              <rect x="32.8" y="18.8" width="8.4" height="8.4" rx="4.2" fill="#FFFFFF" stroke="#000000" strokeWidth="1" />
-              <rect x="25.8" y="21.8" width="2.4" height="2.4" rx="1.2" fill="#000000" />
-              <rect x="35.8" y="21.8" width="2.4" height="2.4" rx="1.2" fill="#000000" />
-              {/* Shaking wavy mouth */}
-              <path d="M28,29.5 Q32,28 36,29.5" stroke="#1E293B" strokeWidth="1.5" fill="none" />
-              {/* Tiny crying teardrop */}
-              <path d="M24,25 Q23,28 22,26 Z" fill="#38BDF8" />
+              {/* Ojos aturdidos estilo cómic */}
+              <circle cx="27" cy="22" r="3" fill="#FFFFFF" stroke="#000000" strokeWidth="1" />
+              <circle cx="37" cy="22" r="3" fill="#FFFFFF" stroke="#000000" strokeWidth="1" />
+              <path d="M26,22 L28,22 M36,22 L38,22" stroke="#000000" strokeWidth="1.5" />
+              <path d="M28,27 Q32,25 36,27" stroke="#991B1B" strokeWidth="1.5" fill="none" />
             </>
           ) : (
             <>
-              {/* Determination eyes and dark pupils */}
-              <rect x="25.7" y="21.5" width="3.6" height="3" rx="1.5" fill="#0E172C" />
-              <rect x="34.7" y="21.5" width="3.6" height="3" rx="1.5" fill="#0E172C" />
-              {/* Thick dark pink eyebrows */}
-              <path d="M25,20.5 Q27.5,19.5 29.5,21.5" stroke="#9D174D" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-              <path d="M39,20.5 Q36.5,19.5 34.5,21.5" stroke="#9D174D" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-              {/* Arrogant smirk / pirate grin */}
-              <path d="M29,28 Q32,29.5 35,28" stroke="#4C0519" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+              {/* Ojos oscuros y firmes de capitana */}
+              <ellipse cx="27" cy="21.5" rx="2" ry="3" fill="#1E1B4B" />
+              <ellipse cx="37" cy="21.5" rx="2" ry="3" fill="#1E1B4B" />
+              {/* Brillo en las pupilas */}
+              <circle cx="26.3" cy="20.5" r="0.7" fill="#FFFFFF" />
+              <circle cx="36.3" cy="20.5" r="0.7" fill="#FFFFFF" />
+              {/* Cejas expresivas */}
+              <path d="M24,18 Q27,17 29,19" stroke="#581C87" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+              <path d="M40,18 Q37,17 35,19" stroke="#581C87" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+              {/* Sonrisa confiada / Labio carmesí */}
+              <path d="M29,27 Q32,29 35,27" stroke="#BE185D" strokeWidth="1.5" fill="none" strokeLinecap="round" />
             </>
           )}
 
-          {/* Front Curly Hair FrameLocks */}
-          <path d="M23.5,21 S20,28 22.5,33" stroke="#EC4899" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-          <path d="M40.5,21 S44,28 41.5,33" stroke="#EC4899" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          {/* Mechones frontales ondulados */}
+          <path d="M21,18 Q18,24 21,30" stroke="#0F172A" strokeWidth="2" fill="none" strokeLinecap="round" />
+          <path d="M43,18 Q46,24 43,30" stroke="#0F172A" strokeWidth="2" fill="none" strokeLinecap="round" />
+
+          {/* --- SOMBRERO PIRATA ROSA DE ALVIDA (ICONICO CON PLUMA BLANCA) --- */}
+          <g transform="translate(0, -2)">
+            {/* Ala ancha rosa del sombrero pirata */}
+            <path d="M12,16 Q32,8 52,16 Q32,18 12,16 Z" fill="#EC4899" stroke="#9D174D" strokeWidth="1.5" />
+            {/* Copa del sombrero */}
+            <path d="M20,15 Q32,5 44,15 Z" fill="#F43F5E" stroke="#9D174D" strokeWidth="1.2" />
+            {/* Pluma blanca lateral */}
+            <path d="M14,15 Q8,6 4,10 Q10,12 16,16 Z" fill="#F8FAFC" stroke="#CBD5E1" strokeWidth="1" />
+            {/* Calavera / Emblema dorado del sombrero */}
+            <circle cx="32" cy="13" r="2.5" fill="#F59E0B" stroke="#B45309" strokeWidth="0.8" />
+          </g>
         </g>
 
-        {/* --- THE IRON SPIKED MACE (MAZA DE HIERRO) COMPONENT --- */}
-        {/* Attacking angle sweep, or default angle over her right hand */}
+        {/* --- MAZA DE HIERRO CON ESPINAS (GARROTE ALVIDA MINIS) --- */}
         {(() => {
-          let rx = 14;
-          let ry = 28;
+          let rx = 12;
+          let ry = 24;
           let rot = maceAngle;
 
           if (isAttacking) {
-            rot = 135;
-            rx = 26;
-            ry = 18;
+            rot = 120;
+            rx = 24;
+            ry = 16;
           } else if (direction === 'up') {
-            rot = -25;
-            rx = 12;
-            ry = 26;
+            rot = -30;
+            rx = 10;
+            ry = 22;
           }
 
           return (
             <g transform={`translate(${rx}, ${ry}) rotate(${rot} 16 16)`} className="transition-transform duration-150">
-              {/* Wooden shaft handle */}
-              <rect x="14.5" y="16" width="3" height="15" rx="1" fill="#4B5563" stroke="#1F2937" strokeWidth="1" />
-              {/* Heavy Studded Iron Head */}
-              <path d="M8,4 L24,4 L27,18 L5,18 Z" fill="#334155" stroke="#0F172A" strokeWidth="1.8" />
-              <rect x="8" y="3.5" width="16" height="5" rx="2.5" fill="#475569" />
+              {/* Mango de madera reforzado */}
+              <rect x="14.5" y="16" width="3.5" height="16" rx="1" fill="#475569" stroke="#0F172A" strokeWidth="1" />
+              {/* Cabeza metálica de la maza de espinas */}
+              <path d="M7,3 L25,3 L28,17 L4,17 Z" fill="#1E293B" stroke="#0F172A" strokeWidth="1.8" />
+              <rect x="7" y="2.5" width="18" height="5" rx="2.5" fill="#334155" />
 
-              {/* Steel shining studs (Spikes) */}
-              <rect x="8.8" y="6.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
-              <rect x="14.8" y="6.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
-              <rect x="20.8" y="6.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
-              <rect x="9.8" y="11.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
-              <rect x="14.8" y="11.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
-              <rect x="19.8" y="11.8" width="2.4" height="2.4" rx="1.2" fill="#E2E8F0" />
-
-              {/* Spike thorns sticking outward of the outline */}
-              <polygon points="5,8 1.5,6 5,10" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />
-              <polygon points="27,8 30.5,6 27,10" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />
-              <polygon points="4,13 0.5,12 4,15" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />
-              <polygon points="28,13 31.5,12 28,15" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />
-              <polygon points="16,3 16,-1 19,2" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />
+              {/* Puntas de acero relucientes */}
+              <polygon points="4,7 0.5,5 4,9" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />
+              <polygon points="28,7 31.5,5 28,9" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />
+              <polygon points="3,13 -0.5,12 3,15" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />
+              <polygon points="29,13 32.5,12 29,15" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />
+              <polygon points="16,2 16,-2 19,1" fill="#F1F5F9" stroke="#0F172A" strokeWidth="0.8" />
             </g>
           );
         })()}
 
-        {/* --- SWEEPING CRESCENT COMBAT SWIPE EFFECT --- */}
+        {/* --- EFECTO DE ATAQUE Y RAFAGA SUBE SUBE --- */}
         {isAttacking && (
           <g className="animate-ping">
-            {/* Swirling energy arc */}
             <path 
-              d="M 6 36 A 26 26 0 0 1 58 36" 
-              stroke="#FEE2E2" 
+              d="M 4 38 A 28 28 0 0 1 60 38" 
+              stroke="#F472B6" 
               strokeWidth="4" 
               strokeLinecap="round" 
               fill="none" 
-              opacity="0.8" 
+              opacity="0.9" 
             />
-            {/* Sparkling star bursts around impact center */}
-            <polygon points="48,16 52,8 55,14 62,14 56,19 59,26 52,22 47,26 49,19" fill="#FBBF24" />
+            <polygon points="48,16 52,8 55,14 62,14 56,19 59,26 52,22 47,26 49,19" fill="#F59E0B" />
           </g>
         )}
       </svg>
     </div>
   );
 };
+

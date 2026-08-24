@@ -133,7 +133,10 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({ dialogue, onNext }) =>
       setDisplayedText(dialogue.text);
       setIsFinished(true);
     } else {
-      onNext();
+      // Defer onNext call to next event loop tick so event bubbling finishes safely before component unmount
+      setTimeout(() => {
+        onNext();
+      }, 0);
     }
   };
 
@@ -180,7 +183,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({ dialogue, onNext }) =>
               }}
               className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all cursor-pointer"
             >
-              <span>{isFinished ? 'Siguiente ▶' : 'Completar Text ▶'}</span>
+              <span>{isFinished ? 'Siguiente ▶' : 'Completar Texto ▶'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

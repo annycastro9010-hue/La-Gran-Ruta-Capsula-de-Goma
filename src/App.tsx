@@ -2138,6 +2138,7 @@ export default function App() {
         {/* Dialog system — fixed overlay, renders on top of everything */}
         {dialogueSeq.triggerType !== null && dialogueSeq.dialogues[dialogueSeq.currentIndex] && (
           <DialogueBox 
+            key={`dialogue-${dialogueSeq.triggerType}-${dialogueSeq.currentIndex}`}
             dialogue={dialogueSeq.dialogues[dialogueSeq.currentIndex]} 
             onNext={handleNextDialogue} 
           />
