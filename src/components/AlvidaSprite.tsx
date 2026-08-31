@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import alvidaRealImg from './alvida_real.png';
 
 interface AlvidaSpriteProps {
   state: 'idle' | 'patrol' | 'chasing' | 'stunned' | 'attacking';
@@ -38,9 +39,6 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
     bounceY = frame === 1 || frame === 3 ? -2 : 0;
   }
 
-  // URL pública dentro de la carpeta /public de Vite
-  const alvidaImageSrc = `${import.meta.env.BASE_URL}alvida_chibi.jpg`;
-
   return (
     <div className="relative w-full h-full flex items-center justify-center select-none pointer-events-none">
       {/* Sube Sube Aura */}
@@ -51,18 +49,18 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
       />
 
       <div 
-        className={`relative w-12 h-12 flex items-center justify-center transition-transform duration-75 ${
+        className={`relative w-14 h-14 flex items-center justify-center transition-transform duration-75 ${
           isAttacking ? 'scale-125' : ''
         }`}
         style={{ 
           transform: `scaleX(${scaleX}) translateY(${bounceY}px) rotate(${rotate}deg)` 
         }}
       >
-        {/* Renderizado directo de la imagen EXACTA de la Opción C */}
+        {/* Renderizado de la ILUSTRACIÓN DIGITAL REAL generada de Alvida Minis Chibi */}
         <img 
-          src={alvidaImageSrc} 
-          alt="Alvida Minis Chibi"
-          className="w-full h-full object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.85)] rounded-full border border-pink-400"
+          src={alvidaRealImg} 
+          alt="Alvida Minis Chibi Real"
+          className="w-full h-full object-cover rounded-full border-2 border-pink-400 shadow-xl drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]"
         />
 
         {/* Efecto de impacto cuando ataca */}
@@ -82,6 +80,7 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
     </div>
   );
 };
+
 
 
 
