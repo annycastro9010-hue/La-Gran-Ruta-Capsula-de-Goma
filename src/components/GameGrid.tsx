@@ -1097,11 +1097,11 @@ export const GameGrid: React.FC<GameGridProps> = ({
         if (enemy.type === 'pirate-officer') {
           sprite = '🗡️🏴‍☠️';
           spriteName = 'OFICIAL';
-          spriteColor = 'border-pink-500 bg-pink-950/40 text-pink-300';
+          spriteColor = 'border-pink-500/80 bg-slate-900/40 text-pink-300';
         } else if (enemy.type === 'alvida') {
           sprite = '🪡🦹‍♀️';
           spriteName = 'C. ALVIDA';
-          spriteColor = 'border-rose-600 bg-rose-950/70 text-rose-100 font-extrabold shadow-[0_0_15px_rgba(244,63,94,0.6)]';
+          spriteColor = 'border-pink-400/80 bg-pink-950/30 text-pink-100 font-extrabold shadow-[0_0_15px_rgba(244,114,182,0.5)]';
           size = 'w-14 h-14';
         } else if (enemy.type === 'marine') {
           sprite = '💂‍♂️👮‍♂️';
