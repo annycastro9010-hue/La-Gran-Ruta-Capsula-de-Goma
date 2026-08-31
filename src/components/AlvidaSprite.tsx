@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import alvidaRealImg from './alvida_real.png';
 
 interface AlvidaSpriteProps {
   state: 'idle' | 'patrol' | 'chasing' | 'stunned' | 'attacking';
@@ -10,13 +9,15 @@ interface AlvidaSpriteProps {
 export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = 'down' }) => {
   const [frame, setFrame] = useState(0);
 
+  // Animación de fotogramas de la hoja de movimiento
   useEffect(() => {
-    let delay = 180;
-    if (state === 'chasing') delay = 90;
-    if (state === 'stunned') delay = 60;
+    let delay = 200;
+    if (state === 'chasing') delay = 100;
+    if (state === 'stunned') delay = 70;
+    if (state === 'attacking') delay = 90;
 
     const timer = setInterval(() => {
-      setFrame((f) => (f + 1) % 4);
+      setFrame((f) => (f + 1) % 3);
     }, delay);
     return () => clearInterval(timer);
   }, [state]);
@@ -26,22 +27,25 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
   const isChasing = state === 'chasing';
 
   let scaleX = direction === 'left' ? -1 : 1;
-  let bounceY = 0;
-  let rotate = 0;
 
-  if (isChasing) {
-    bounceY = frame % 2 === 0 ? -3 : 2;
-    rotate = frame % 2 === 0 ? 8 : -8;
-  } else if (isStunned) {
-    rotate = (frame % 2 === 0 ? 15 : -15);
-    bounceY = frame % 2 === 0 ? -4 : 4;
-  } else {
-    bounceY = frame === 1 || frame === 3 ? -2 : 0;
+  // Calculamos la fila y columna exactos de la hoja de movimientos generada:
+  // Fila 0 (Top 0%): Poses de reposo / frente
+  // Fila 1 (Middle 50%): Pasos / Caminar / Movimiento
+  // Fila 2 (Bottom 100%): Poses de ataque con maza de hierro
+  let rowPos = '0%';
+  if (isChasing || state === 'patrol') {
+    rowPos = '50%';
+  } else if (isAttacking || isStunned) {
+    rowPos = '100%';
   }
+
+  const colPos = `${(frame % 3) * 50}%`;
+
+  const spriteSheetUrl = `${import.meta.env.BASE_URL}alvida_spritesheet.png`;
 
   return (
     <div className="relative w-full h-full flex items-center justify-center select-none pointer-events-none">
-      {/* Sube Sube Aura */}
+      {/* Resplandor / Aura Sube Sube */}
       <div 
         className={`absolute bottom-0 w-10 h-3 rounded-full blur-xs transition-all ${
           isChasing ? 'bg-pink-500/80 scale-125 animate-pulse' : 'bg-slate-950/60'
@@ -49,30 +53,32 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
       />
 
       <div 
-        className={`relative w-14 h-14 flex items-center justify-center transition-transform duration-75 ${
-          isAttacking ? 'scale-125' : ''
-        }`}
-        style={{ 
-          transform: `scaleX(${scaleX}) translateY(${bounceY}px) rotate(${rotate}deg)` 
-        }}
+        className={`relative w-14 h-14 rounded-xl overflow-hidden shadow-xl border-2 border-pink-400/80 bg-slate-950 flex items-center justify-center transition-transform duration-75 ${
+          isAttacking ? 'scale-125 border-yellow-300' : ''
+        } ${isStunned ? 'animate-bounce border-amber-400' : ''}`}
+        style={{ transform: `scaleX(${scaleX})` }}
       >
-        {/* Renderizado de la ILUSTRACIÓN DIGITAL REAL generada de Alvida Minis Chibi */}
-        <img 
-          src={alvidaRealImg} 
-          alt="Alvida Minis Chibi Real"
-          className="w-full h-full object-cover rounded-full border-2 border-pink-400 shadow-xl drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]"
+        {/* RECORTE INTERACTIVO DE LA HOJA DE MOVIMIENTOS REAL */}
+        <div
+          className="w-full h-full"
+          style={{
+            backgroundImage: `url(${spriteSheetUrl})`,
+            backgroundSize: '300% 300%',
+            backgroundPosition: `${colPos} ${rowPos}`,
+            imageRendering: 'pixelated',
+          }}
         />
 
-        {/* Efecto de impacto cuando ataca */}
+        {/* Efecto de ataque */}
         {isAttacking && (
-          <div className="absolute -right-2 -top-2 w-7 h-7 text-xl animate-ping">
+          <div className="absolute inset-0 flex items-center justify-center text-xl animate-ping">
             💥
           </div>
         )}
 
         {/* Indicador de mareo */}
         {isStunned && (
-          <div className="absolute -top-2 right-0 text-xs animate-spin">
+          <div className="absolute -top-1 right-0 text-xs animate-spin">
             💫
           </div>
         )}
@@ -80,12 +86,3 @@ export const AlvidaSprite: React.FC<AlvidaSpriteProps> = ({ state, direction = '
     </div>
   );
 };
-
-
-
-
-
-
-
-
-
